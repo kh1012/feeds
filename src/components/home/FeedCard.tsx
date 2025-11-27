@@ -32,20 +32,21 @@ export const FeedCard = ({ post }: { post: Post }) => {
           />
         </div>
         <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 h-full">
             <p className="font-semibold text-white">{post.author.name}</p>
             <span className="text-sm text-white/50">{post.author.handle}</span>
             <span className="text-sm text-white/30">· {post.timestamp}</span>
           </div>
-          <MarkdownPreview
-            blocks={displayedBlocks}
-            showFade={showFade}
-            expandable={truncated}
-            expanded={expanded}
-            onToggle={truncated ? handleToggle : undefined}
-          />
         </div>
       </header>
+
+      <MarkdownPreview
+        blocks={displayedBlocks}
+        showFade={showFade}
+        expandable={truncated}
+        expanded={expanded}
+        onToggle={truncated ? handleToggle : undefined}
+      />
     </article>
   );
 };

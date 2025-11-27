@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="기본 구성">
-      <change afterPath="$PROJECT_DIR$/src/components/home/MarkdownPreview.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/define/markdownDefines.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/define/postDefines.ts" afterDir="false" />
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="카드 구성">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +82,7 @@
       <updated>1764243136260</updated>
       <workItem from="1764243137460" duration="630000" />
       <workItem from="1764243780463" duration="273000" />
-      <workItem from="1764244594759" duration="1619000" />
+      <workItem from="1764244594759" duration="2315000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
@@ -96,7 +92,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764243960854</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="카드 구성">
+      <option name="closed" value="true" />
+      <created>1764246296795</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1764246296795</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -104,6 +108,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="기본 구성" />
-    <option name="LAST_COMMIT_MESSAGE" value="기본 구성" />
+    <MESSAGE value="카드 구성" />
+    <option name="LAST_COMMIT_MESSAGE" value="카드 구성" />
   </component>
 </project>
