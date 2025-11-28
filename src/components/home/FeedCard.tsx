@@ -1,52 +1,83 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Post } from '@/define/postDefines';
-import { buildBlocks, clampBlocks } from '@/utils/markdownUtils';
-import { MAX_VISIBLE_LINES } from '@/define/markdownDefines';
-import { MarkdownPreview } from './MarkdownPreview';
+import { TilContentType } from '@/define/tilDefines';
+import { fetchTilContentMarkdown } from '@/utils/tilUtils';
+import { notFound } from 'next/navigation';
+import { URL } from '@/define/urlDefines';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { parseMarkdownWithMeta } from '@/utils/mdParseUtils';
 
-export const FeedCard = ({ post }: { post: Post }) => {
-  const [expanded, setExpanded] = useState(false);
-  const blocks = useMemo(() => buildBlocks(post.content), [post.content]);
-  const { visible: clampedBlocks, truncated } = useMemo(
-    () => clampBlocks(blocks, MAX_VISIBLE_LINES),
-    [blocks],
-  );
+const MAX_LINES = 4;
 
-  const displayedBlocks = expanded ? blocks : clampedBlocks;
-  const showFade = !expanded && truncated;
-  const handleToggle = () => setExpanded((prev) => !prev);
+interface FeedCardProps {
+  content: TilContentType;
+}
+
+export const FeedCard = ({ content }: FeedCardProps) => {
+  const [markdownValue, setMarkdownValue] = useState<string>('');
+  const [expanded, setExpanded] = useState<boolean>(false);
+
+  useEffect(() => {
+    const asyncF = async () => {
+      try {
+        const md = await fetchTilContentMarkdown(content.rawUrl);
+        const { meta, writing } = parseMarkdownWithMeta(md);
+        return writing;
+      } catch (err) {
+        console.error(err);
+        notFound();
+      }
+    };
+
+    asyncF().then((r) => setMarkdownValue(r));
+  }, [content.rawUrl]);
+
+  if (!markdownValue) {
+    return null;
+  }
+
+  // 줄 단위로 잘라서 확인
+  const lines = markdownValue.split('\n');
+  const isLong = lines.length > 4;
+  const preview = lines.slice(0, 4).join('\n');
+  const displayedMarkdown = expanded ? markdownValue : preview;
+
+  const onClickExpandHandler = () => {
+    setExpanded(!expanded);
+  };
 
   return (
-    <article className="rounded-[28px] border border-white/10 bg-[#1c1c1e] p-6 text-white/90 shadow-[0_15px_60px_rgba(0,0,0,0.35)]">
+    <article className="flex flex-col gap-4 rounded-[28px] border border-white/10 bg-[#1c1c1e] p-6 text-white/90 shadow-[0_15px_60px_rgba(0,0,0,0.35)]">
       <header className="flex gap-4">
         <div className="relative">
           <Image
-            src={post.author.avatar}
-            alt={`${post.author.name} 아바타`}
+            src={`${URL.GITHUB_TIL_ASSETS_RAW}/profile-img.jpg`}
+            alt={'프로필'}
             width={56}
             height={56}
             className="h-14 w-14 rounded-full border border-white/10 object-cover"
+            loading={'lazy'}
           />
         </div>
         <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-2 h-full">
-            <p className="font-semibold text-white">{post.author.name}</p>
-            <span className="text-sm text-white/50">{post.author.handle}</span>
-            <span className="text-sm text-white/30">· {post.timestamp}</span>
+          <div className="flex flex-wrap items-center gap-10 h-full">
+            <p className="font-semibold text-white">{content.date}</p>
+            {/*<span className="text-sm text-white/50">{content.url}</span>*/}
           </div>
         </div>
       </header>
 
-      <MarkdownPreview
-        blocks={displayedBlocks}
-        showFade={showFade}
-        expandable={truncated}
-        expanded={expanded}
-        onToggle={truncated ? handleToggle : undefined}
-      />
+      <div className="prose prose-invert prose-sm max-w-none mt-4">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayedMarkdown}</ReactMarkdown>
+      </div>
+      {isLong && (
+        <button type={'button'} onClick={onClickExpandHandler}>
+          {expanded ? '접기' : '더보기'}
+        </button>
+      )}
     </article>
   );
 };

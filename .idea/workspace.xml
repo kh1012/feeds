@@ -5,8 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="카드 구성">
+      <change afterPath="$PROJECT_DIR$/src/components/common/PortalOverlay.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/common/Spinner.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/home/FeedCards.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/define/tilDefines.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/define/urlDefines.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/mdParseUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/tilUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/define/markdownDefines.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/define/postDefines.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/markdownUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +63,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/kh1012/MIDAS/Research/feeds/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/kh1012/MIDAS/Research/feeds/node_modules/typescript/lib&quot;
   }
 }</component>
@@ -82,7 +98,11 @@
       <updated>1764243136260</updated>
       <workItem from="1764243137460" duration="630000" />
       <workItem from="1764243780463" duration="273000" />
-      <workItem from="1764244594759" duration="2315000" />
+      <workItem from="1764244594759" duration="3333000" />
+      <workItem from="1764293230580" duration="201000" />
+      <workItem from="1764303035778" duration="1208000" />
+      <workItem from="1764304298243" duration="147000" />
+      <workItem from="1764313677110" duration="5898000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
