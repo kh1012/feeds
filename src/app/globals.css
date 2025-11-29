@@ -3,294 +3,291 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1f2328;
-  --card-bg: #ffffff;
-  --card-border: #d1d9e0;
-  --text-secondary: #656d76;
-  --text-muted: #8b949e;
-  --accent: #0969da;
-  --hover-bg: #f6f8fa;
-  --font-pretendard:
-    'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
+    --background: #ffffff;
+    --foreground: #1f2328;
+    --card-bg: #ffffff;
+    --card-border: #d1d9e0;
+    --text-secondary: #656d76;
+    --text-muted: #8b949e;
+    --accent: #0969da;
+    --hover-bg: #f6f8fa;
+    --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
     'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-pretendard);
-  --font-mono: var(--font-geist-mono);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-pretendard);
+    --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-pretendard);
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-pretendard);
 }
 
-/* GitHub 스타일 반응형 마크다운 타이포그래피 */
 .prose-github {
-  /* 기본 텍스트 스타일 */
-  line-height: 1.6;
-  word-wrap: break-word;
+    /* 기본 텍스트 스타일 */
+    line-height: 1.6;
+    word-wrap: break-word;
 }
 
 /* h1 스타일 - 반응형 */
 .prose-github h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.25;
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--card-border);
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.25;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--card-border);
+    margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 @media (min-width: 640px) {
-  .prose-github h1 {
-    font-size: 1.75rem;
-  }
+    .prose-github h1 {
+        font-size: 1.75rem;
+    }
 }
 
 @media (min-width: 768px) {
-  .prose-github h1 {
-    font-size: 2rem;
-  }
+    .prose-github h1 {
+        font-size: 2rem;
+    }
 }
 
 /* h2 스타일 - 반응형 */
 .prose-github h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.25;
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--card-border);
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--card-border);
+    margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 @media (min-width: 640px) {
-  .prose-github h2 {
-    font-size: 1.375rem;
-  }
+    .prose-github h2 {
+        font-size: 1.375rem;
+    }
 }
 
 @media (min-width: 768px) {
-  .prose-github h2 {
-    font-size: 1.5rem;
-  }
+    .prose-github h2 {
+        font-size: 1.5rem;
+    }
 }
 
 /* h3 스타일 - 반응형 */
 .prose-github h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.25;
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 @media (min-width: 640px) {
-  .prose-github h3 {
-    font-size: 1.1875rem;
-  }
+    .prose-github h3 {
+        font-size: 1.1875rem;
+    }
 }
 
 @media (min-width: 768px) {
-  .prose-github h3 {
-    font-size: 1.25rem;
-  }
+    .prose-github h3 {
+        font-size: 1.25rem;
+    }
 }
 
 /* h4 스타일 - 반응형 */
 .prose-github h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.25;
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 @media (min-width: 768px) {
-  .prose-github h4 {
-    font-size: 1rem;
-  }
+    .prose-github h4 {
+        font-size: 1rem;
+    }
 }
 
 /* h5, h6 스타일 */
 .prose-github h5,
 .prose-github h6 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25;
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 /* 문단 스타일 */
 .prose-github p {
-  margin-top: 0;
-  margin-bottom: 1em;
-  font-size: 0.875rem;
+    margin-top: 0;
+    margin-bottom: 1em;
+    font-size: 0.875rem;
 }
 
 @media (min-width: 640px) {
-  .prose-github p {
-    font-size: 0.9375rem;
-  }
+    .prose-github p {
+        font-size: 0.9375rem;
+    }
 }
 
 @media (min-width: 768px) {
-  .prose-github p {
-    font-size: 1rem;
-  }
+    .prose-github p {
+        font-size: 1rem;
+    }
 }
 
 /* 링크 스타일 */
 .prose-github a {
-  color: var(--accent);
-  text-decoration: none;
+    color: var(--accent);
+    text-decoration: none;
 }
 
 .prose-github a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 /* 코드 블록 스타일 */
 .prose-github pre {
-  padding: 1rem;
-  overflow: auto;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  background-color: #f6f8fa;
-  border-radius: 6px;
-  margin-top: 0;
-  margin-bottom: 1em;
+    padding: 1rem;
+    overflow: auto;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    background-color: #f6f8fa;
+    border-radius: 6px;
+    margin-top: 0;
+    margin-bottom: 1em;
 }
 
 @media (min-width: 768px) {
-  .prose-github pre {
-    font-size: 0.875rem;
-  }
+    .prose-github pre {
+        font-size: 0.875rem;
+    }
 }
 
 /* 인라인 코드 스타일 */
 .prose-github code {
-  padding: 0.2em 0.4em;
-  margin: 0;
-  font-size: 0.8125rem;
-  background-color: rgba(175, 184, 193, 0.2);
-  border-radius: 6px;
-  font-family:
-    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 0.8125rem;
+    background-color: rgba(175, 184, 193, 0.2);
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
 @media (min-width: 768px) {
-  .prose-github code {
-    font-size: 0.875rem;
-  }
+    .prose-github code {
+        font-size: 0.875rem;
+    }
 }
 
 .prose-github pre code {
-  padding: 0;
-  margin: 0;
-  font-size: inherit;
-  background-color: transparent;
-  border-radius: 0;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    background-color: transparent;
+    border-radius: 0;
 }
 
 /* 리스트 스타일 */
 .prose-github ul,
 .prose-github ol {
-  padding-left: 2em;
-  margin-top: 0;
-  margin-bottom: 1em;
+    padding-left: 2em;
+    margin-top: 0;
+    margin-bottom: 1em;
 }
 
 .prose-github li {
-  margin-top: 0.25em;
-  font-size: 0.875rem;
+    margin-top: 0.25em;
+    font-size: 0.875rem;
 }
 
 @media (min-width: 640px) {
-  .prose-github li {
-    font-size: 0.9375rem;
-  }
+    .prose-github li {
+        font-size: 0.9375rem;
+    }
 }
 
 @media (min-width: 768px) {
-  .prose-github li {
-    font-size: 1rem;
-  }
+    .prose-github li {
+        font-size: 1rem;
+    }
 }
 
 /* 인용문 스타일 */
 .prose-github blockquote {
-  padding: 0 1em;
-  color: var(--text-secondary);
-  border-left: 0.25em solid var(--card-border);
-  margin: 0 0 1em 0;
+    padding: 0 1em;
+    color: var(--text-secondary);
+    border-left: 0.25em solid var(--card-border);
+    margin: 0 0 1em 0;
 }
 
 /* 테이블 스타일 */
 .prose-github table {
-  width: 100%;
-  overflow: auto;
-  border-collapse: collapse;
-  margin-top: 0;
-  margin-bottom: 1em;
+    width: 100%;
+    overflow: auto;
+    border-collapse: collapse;
+    margin-top: 0;
+    margin-bottom: 1em;
 }
 
 .prose-github th,
 .prose-github td {
-  padding: 6px 13px;
-  border: 1px solid var(--card-border);
-  font-size: 0.875rem;
+    padding: 6px 13px;
+    border: 1px solid var(--card-border);
+    font-size: 0.875rem;
 }
 
 @media (min-width: 768px) {
-  .prose-github th,
-  .prose-github td {
-    font-size: 1rem;
-  }
+    .prose-github th,
+    .prose-github td {
+        font-size: 1rem;
+    }
 }
 
 .prose-github th {
-  font-weight: 600;
-  background-color: var(--hover-bg);
+    font-weight: 600;
+    background-color: var(--hover-bg);
 }
 
 /* 구분선 스타일 */
 .prose-github hr {
-  height: 0.25em;
-  padding: 0;
-  margin: 1.5em 0;
-  background-color: var(--card-border);
-  border: 0;
+    height: 0.25em;
+    padding: 0;
+    margin: 1.5em 0;
+    background-color: var(--card-border);
+    border: 0;
 }
 
 /* 이미지 스타일 */
 .prose-github img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
 }
 
 /* 첫 번째 헤딩의 마진 제거 */
 .prose-github > *:first-child {
-  margin-top: 0 !important;
+    margin-top: 0 !important;
 }
 
 @keyframes apple-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scale(0.7);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.7);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
