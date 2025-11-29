@@ -17,7 +17,7 @@ export default function PortalOverlay({ children }: PortalOverlayProps) {
   if (!mounted) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm bg-black/30">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center backdrop-blur-sm bg-white/70">
       {children}
     </div>,
     document.body,

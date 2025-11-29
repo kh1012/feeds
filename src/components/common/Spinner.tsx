@@ -5,7 +5,7 @@ export function Spinner() {
         <span
           key={i}
           className={`
-            block w-2 h-2 rounded-full bg-gray-500
+            block w-2 h-2 rounded-full bg-[#656d76]
             animate-[apple-pulse_1s_ease-in-out_infinite]
           `}
           style={{

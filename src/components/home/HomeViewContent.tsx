@@ -8,7 +8,7 @@ import { FeedCard } from '@/components/home/FeedCard';
 import { Spinner } from '@/components/common/Spinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
 
-export default function FeedCards() {
+export default function HomeViewContent() {
   const [isPending, setIsPending] = useState(false);
   const [contents, setContents] = useState<TilContentType[]>([]);
 
@@ -17,9 +17,6 @@ export default function FeedCards() {
       setIsPending(true);
 
       try {
-        //너무 빠르니까 강제로 넣어볼까
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
         const tilContents = await fetchTilContents();
         if (tilContents.length === 0) {
           notFound();
@@ -29,6 +26,7 @@ export default function FeedCards() {
         console.error(err);
         notFound();
       } finally {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         setIsPending(false);
       }
     };

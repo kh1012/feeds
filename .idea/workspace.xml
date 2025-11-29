@@ -4,25 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="카드 구성">
-      <change afterPath="$PROJECT_DIR$/src/components/common/PortalOverlay.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/common/Spinner.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/home/FeedCards.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/define/tilDefines.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/define/urlDefines.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/mdParseUtils.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/tilUtils.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="라이브러리 도입 및 1차 개선">
+      <change afterPath="$PROJECT_DIR$/src/components/common/Button.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/home/HomeViewHeader.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/icons/githubLogo.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/PortalOverlay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/PortalOverlay.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Spinner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Spinner.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/define/markdownDefines.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/define/postDefines.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/markdownUtils.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/home/FeedCards.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/home/MarkdownPreview.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/define/urlDefines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/define/urlDefines.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/tilUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/tilUtils.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +96,7 @@
       <workItem from="1764293230580" duration="201000" />
       <workItem from="1764303035778" duration="1208000" />
       <workItem from="1764304298243" duration="147000" />
-      <workItem from="1764313677110" duration="5898000" />
+      <workItem from="1764313677110" duration="8863000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
@@ -120,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764246296795</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="라이브러리 도입 및 1차 개선">
+      <option name="closed" value="true" />
+      <created>1764321393843</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1764321393843</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +131,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="기본 구성" />
     <MESSAGE value="카드 구성" />
-    <option name="LAST_COMMIT_MESSAGE" value="카드 구성" />
+    <MESSAGE value="라이브러리 도입 및 1차 개선" />
+    <option name="LAST_COMMIT_MESSAGE" value="라이브러리 도입 및 1차 개선" />
   </component>
 </project>

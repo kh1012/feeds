@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { TilContentType } from '@/define/tilDefines';
 import { fetchTilContentMarkdown } from '@/utils/tilUtils';
 import { notFound } from 'next/navigation';
-import { URL } from '@/define/urlDefines';
+import { FEEDS_URLS } from '@/define/urlDefines';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { parseMarkdownWithMeta } from '@/utils/mdParseUtils';
@@ -50,31 +50,35 @@ export const FeedCard = ({ content }: FeedCardProps) => {
   };
 
   return (
-    <article className="flex flex-col gap-4 rounded-[28px] border border-white/10 bg-[#1c1c1e] p-6 text-white/90 shadow-[0_15px_60px_rgba(0,0,0,0.35)]">
+    <article className="flex flex-col gap-4 rounded-lg border border-[#d1d9e0] bg-white p-6 text-[#1f2328] shadow-sm hover:shadow-md transition-shadow">
       <header className="flex gap-4">
         <div className="relative">
           <Image
-            src={`${URL.GITHUB_TIL_ASSETS_RAW}/profile-img.jpg`}
+            src={`${FEEDS_URLS.GITHUB_TIL_ASSETS_RAW}/profile-img.jpg`}
             alt={'프로필'}
             width={56}
             height={56}
-            className="h-14 w-14 rounded-full border border-white/10 object-cover"
+            className="h-14 w-14 rounded-full border border-[#d1d9e0] object-cover"
             loading={'lazy'}
           />
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-10 h-full">
-            <p className="font-semibold text-white">{content.date}</p>
+            <p className="font-semibold text-[#1f2328]">{content.date}</p>
             {/*<span className="text-sm text-white/50">{content.url}</span>*/}
           </div>
         </div>
       </header>
 
-      <div className="prose prose-invert prose-sm max-w-none mt-4">
+      <div className="prose prose-sm max-w-none mt-4 prose-headings:text-[#1f2328] prose-p:text-[#1f2328] prose-a:text-[#0969da]">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayedMarkdown}</ReactMarkdown>
       </div>
       {isLong && (
-        <button type={'button'} onClick={onClickExpandHandler}>
+        <button
+          type={'button'}
+          onClick={onClickExpandHandler}
+          className="text-[#0969da] hover:underline text-sm font-medium"
+        >
           {expanded ? '접기' : '더보기'}
         </button>
       )}

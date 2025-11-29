@@ -1,8 +1,8 @@
 import { type TilContentType } from '@/define/tilDefines';
-import { URL } from '@/define/urlDefines';
+import { FEEDS_URLS } from '@/define/urlDefines';
 
 export async function fetchTilContents(): Promise<TilContentType[]> {
-  const res = await fetch(`${URL.GITHUB_TIL_README_RAW}`, {
+  const res = await fetch(`${FEEDS_URLS.GITHUB_TIL_README_RAW}`, {
     next: { revalidate: 60 }, //60초 리패칭
   });
 
