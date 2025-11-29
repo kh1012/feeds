@@ -44,13 +44,11 @@ export default function HomeViewContent() {
 
   return (
     <>
-      <div className={'w-full flex justify-center text-neutral-500 py-4'}>
+      <div className={'w-full flex justify-center text-neutral-500 py-4 text-sm sm:text-base'}>
         {contents.length}개의 기록
       </div>
 
-      <div className={'space-y-6'}>
-        {contents && contents.map((content) => <FeedCard key={content.title} content={content} />)}
-      </div>
+      {contents && contents.map((content) => <FeedCard key={content.title} content={content} />)}
     </>
   );
 }

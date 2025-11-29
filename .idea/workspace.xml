@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="탭 간격 변경">
-      <change afterPath="$PROJECT_DIR$/src/icons/githubLogoWhite.tsx" afterDir="false" />
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="Header 부분 스타일링 정리">
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/common/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Button.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewHeader.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/githubLogo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/githubLogo.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +91,7 @@
       <workItem from="1764293230580" duration="201000" />
       <workItem from="1764303035778" duration="1208000" />
       <workItem from="1764304298243" duration="147000" />
-      <workItem from="1764313677110" duration="10406000" />
+      <workItem from="1764313677110" duration="12860000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
@@ -144,7 +141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764406977038</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Header 부분 스타일링 정리">
+      <option name="closed" value="true" />
+      <created>1764408135996</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764408135996</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +162,7 @@
     <MESSAGE value="스타일 변경 (화이트톤)" />
     <MESSAGE value="기본 반응형 적용" />
     <MESSAGE value="탭 간격 변경" />
-    <option name="LAST_COMMIT_MESSAGE" value="탭 간격 변경" />
+    <MESSAGE value="Header 부분 스타일링 정리" />
+    <option name="LAST_COMMIT_MESSAGE" value="Header 부분 스타일링 정리" />
   </component>
 </project>

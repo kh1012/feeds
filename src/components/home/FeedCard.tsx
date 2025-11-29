@@ -9,6 +9,8 @@ import { FEEDS_URLS } from '@/define/urlDefines';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { parseMarkdownWithMeta } from '@/utils/mdParseUtils';
+import { formatDateWithDay } from '@/utils/dateUtils';
+import Button from '@/components/common/Button';
 
 interface FeedCardProps {
   content: TilContentType;
@@ -43,12 +45,16 @@ export const FeedCard = ({ content }: FeedCardProps) => {
   const preview = lines.slice(0, 4).join('\n');
   const displayedMarkdown = expanded ? markdownValue : preview;
 
+  const urlLastPath = content.url.split('/').pop();
+  const shortUrl =
+    urlLastPath && urlLastPath?.length < 24 ? urlLastPath : urlLastPath?.slice(0, 24) + '...';
+
   const onClickExpandHandler = () => {
     setExpanded(!expanded);
   };
 
   return (
-    <article className="flex flex-col gap-4 border-t border-[#d1d9e0] bg-white text-[#1f2328] px-4 pt-4">
+    <article className="flex flex-col gap-4 border-t border-neutral-200 text-[#1f2328] p-4 sm:p-8">
       <header className="flex gap-4">
         <div className="relative">
           <Image
@@ -56,14 +62,26 @@ export const FeedCard = ({ content }: FeedCardProps) => {
             alt={'프로필'}
             width={56}
             height={56}
-            className="size-12 rounded-full border border-[#d1d9e0] object-cover sm:size-14"
+            className="size-10 rounded-full border border-[#d1d9e0] object-cover sm:size-12"
             loading={'lazy'}
           />
         </div>
         <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-10 h-full">
-            <p className="font-semibold text-[#1f2328]">{content.date}</p>
-            {/*<span className="text-sm text-white/50">{content.url}</span>*/}
+          <div className="flex flex-col flex-wrap items-start h-full">
+            <p className="text-neutral-700 text-sm sm:text-base">
+              {formatDateWithDay(content.date)}
+            </p>
+            <a
+              className={'overflow-hidden sm:max-w-[618px]'}
+              href={content.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="truncate text-base text-blue-400 hidden sm:block">
+                {content.url}
+              </span>
+              <span className={'text-sm text-blue-400 sm:hidden'}>{shortUrl}</span>
+            </a>
           </div>
         </div>
       </header>
@@ -71,14 +89,11 @@ export const FeedCard = ({ content }: FeedCardProps) => {
       <div className="prose-github max-w-none mt-4 text-[#1f2328]">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayedMarkdown}</ReactMarkdown>
       </div>
+
       {isLong && (
-        <button
-          type={'button'}
-          onClick={onClickExpandHandler}
-          className="text-[#0969da] hover:underline text-sm font-medium"
-        >
-          {expanded ? '접기' : '더보기'}
-        </button>
+        <div className={'flex justify-center'}>
+          <Button onClick={onClickExpandHandler}>{expanded ? '접기' : '더보기'}</Button>
+        </div>
       )}
     </article>
   );
