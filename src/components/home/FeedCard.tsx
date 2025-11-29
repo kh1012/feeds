@@ -70,7 +70,7 @@ export const FeedCard = ({ content }: FeedCardProps) => {
         </div>
       </header>
 
-      <div className="prose prose-sm max-w-none mt-4 prose-headings:text-[#1f2328] prose-p:text-[#1f2328] prose-a:text-[#0969da]">
+      <div className="prose-github max-w-none mt-4 text-[#1f2328]">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayedMarkdown}</ReactMarkdown>
       </div>
       {isLong && (
