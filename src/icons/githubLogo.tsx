@@ -1,6 +1,6 @@
 export default function IconGithubLogo() {
   return (
-    <svg width="98" height="96" xmlns="http://www.w3.org/2000/svg">
+    <svg className={'size-6 aspect-auto'} viewBox="0 0 98 96" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

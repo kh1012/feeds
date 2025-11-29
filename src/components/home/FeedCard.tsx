@@ -10,8 +10,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { parseMarkdownWithMeta } from '@/utils/mdParseUtils';
 
-const MAX_LINES = 4;
-
 interface FeedCardProps {
   content: TilContentType;
 }
@@ -50,7 +48,7 @@ export const FeedCard = ({ content }: FeedCardProps) => {
   };
 
   return (
-    <article className="flex flex-col gap-4 rounded-lg border border-[#d1d9e0] bg-white p-6 text-[#1f2328] shadow-sm hover:shadow-md transition-shadow">
+    <article className="flex flex-col gap-4 border-t border-[#d1d9e0] bg-white text-[#1f2328] px-4 pt-4">
       <header className="flex gap-4">
         <div className="relative">
           <Image
@@ -58,7 +56,7 @@ export const FeedCard = ({ content }: FeedCardProps) => {
             alt={'프로필'}
             width={56}
             height={56}
-            className="h-14 w-14 rounded-full border border-[#d1d9e0] object-cover"
+            className="size-12 rounded-full border border-[#d1d9e0] object-cover sm:size-14"
             loading={'lazy'}
           />
         </div>

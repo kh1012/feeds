@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="라이브러리 도입 및 1차 개선">
-      <change afterPath="$PROJECT_DIR$/src/components/common/Button.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/home/HomeViewHeader.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/icons/githubLogo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="탭 간격 변경">
+      <change afterPath="$PROJECT_DIR$/src/icons/githubLogoWhite.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/PortalOverlay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/PortalOverlay.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/Spinner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Spinner.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/common/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/Button.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/FeedCards.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/MarkdownPreview.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/define/urlDefines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/define/urlDefines.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/tilUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/tilUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/icons/githubLogo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/githubLogo.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +26,9 @@
   </component>
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -96,7 +94,7 @@
       <workItem from="1764293230580" duration="201000" />
       <workItem from="1764303035778" duration="1208000" />
       <workItem from="1764304298243" duration="147000" />
-      <workItem from="1764313677110" duration="8863000" />
+      <workItem from="1764313677110" duration="10406000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
@@ -122,7 +120,31 @@
       <option name="project" value="LOCAL" />
       <updated>1764321393843</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="스타일 변경 (화이트톤)">
+      <option name="closed" value="true" />
+      <created>1764406584105</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1764406584105</updated>
+    </task>
+    <task id="LOCAL-00005" summary="기본 반응형 적용">
+      <option name="closed" value="true" />
+      <created>1764406892298</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1764406892298</updated>
+    </task>
+    <task id="LOCAL-00006" summary="탭 간격 변경">
+      <option name="closed" value="true" />
+      <created>1764406977038</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1764406977038</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -132,6 +154,9 @@
     <MESSAGE value="기본 구성" />
     <MESSAGE value="카드 구성" />
     <MESSAGE value="라이브러리 도입 및 1차 개선" />
-    <option name="LAST_COMMIT_MESSAGE" value="라이브러리 도입 및 1차 개선" />
+    <MESSAGE value="스타일 변경 (화이트톤)" />
+    <MESSAGE value="기본 반응형 적용" />
+    <MESSAGE value="탭 간격 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value="탭 간격 변경" />
   </component>
 </project>
