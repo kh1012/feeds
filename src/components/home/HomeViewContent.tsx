@@ -43,11 +43,17 @@ export default function HomeViewContent() {
 
   return (
     <>
-      <div className={'w-full flex justify-center text-neutral-500 py-4 text-sm sm:text-base'}>
+      <div
+        className={
+          'w-full flex justify-center text-neutral-600 py-4 text-sm sm:text-base bg-neutral-100'
+        }
+      >
         {contents.length}개의 기록
       </div>
 
-      {contents && contents.map((content) => <FeedCard key={content.title} content={content} />)}
+      <div className="w-full flex flex-col">
+        {contents && contents.map((content) => <FeedCard key={content.title} content={content} />)}
+      </div>
     </>
   );
 }
