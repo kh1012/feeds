@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist_Mono } from 'next/font/google';
 import './globals.css';
+import GNB from '@/components/common/GNB';
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -28,7 +29,10 @@ export default function RootLayout({
         />
         <title>kh1012 - TIL</title>
       </head>
-      <body className={`${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistMono.variable} antialiased`}>
+        <GNB />
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
