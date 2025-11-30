@@ -66,13 +66,19 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
     return Math.max(...data.map((d) => d.totalValue), 1);
   }, [data]);
 
+  const totalLength = data.map((v) => v.totalValue).reduce((a, b) => a + b, 0);
+
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       {/* 카테고리 목록 */}
       <div className="lg:w-64 shrink-0">
-        <h3 className="text-sm font-semibold text-neutral-500 mb-3 uppercase tracking-wide">
-          Categories
-        </h3>
+        <div className={'w-full flex justify-between mb-3'}>
+          <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide">
+            Categories
+          </h3>
+
+          <h3 className={'text-sm font-semibold text-neutral-400'}>{totalLength}</h3>
+        </div>
         <div className="space-y-1">
           {data.map((cat) => {
             const isSelected = selectedCategory === cat.category;
@@ -84,7 +90,7 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                 onClick={() => setSelectedCategory(cat.category)}
                 className={`
                   w-full text-left px-3 py-2.5 rounded-lg transition-all duration-200
-                  relative overflow-hidden group
+                  relative overflow-hidden group cursor-pointer
                   ${
                     isSelected
                       ? 'bg-[#1f2328] text-white shadow-md'
@@ -129,22 +135,22 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
           </div>
         ) : selectedCategoryData ? (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col gap-2 justify-between mb-4 sm:flex-row sm:items-center">
               <h3 className="text-lg font-semibold text-[#1f2328]">
                 {formatCategoryName(selectedCategory)}
               </h3>
               <div className="flex items-center gap-4 text-xs text-neutral-500">
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded" style={{ backgroundColor: '#ebedf0' }} />
-                  <span>미학습</span>
+                  <span>TODO</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded" style={{ backgroundColor: '#9be9a8' }} />
-                  <span>학습중</span>
+                  <span>IN PROGRESS</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded" style={{ backgroundColor: '#216e39' }} />
-                  <span>숙련</span>
+                  <span>DONE</span>
                 </div>
               </div>
             </div>
@@ -185,7 +191,7 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                   >
                     <div className="font-medium">{topic.name}</div>
                     <div className="text-neutral-400 text-[10px] mt-0.5">
-                      {topic.value === 0 ? '아직 학습하지 않음' : `학습 포인트: ${topic.value}`}
+                      {topic.value === 0 ? 'TODO' : `Point: ${topic.value}`}
                     </div>
                     {/* 툴팁 화살표 */}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#1f2328]" />
@@ -201,19 +207,19 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                   <div className="text-2xl font-bold text-[#1f2328]">
                     {selectedCategoryData.topics.length}
                   </div>
-                  <div className="text-xs text-neutral-500">전체 토픽</div>
+                  <div className="text-xs text-neutral-500">Total</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold" style={{ color: '#216e39' }}>
                     {selectedCategoryData.topics.filter((t) => t.value > 0).length}
                   </div>
-                  <div className="text-xs text-neutral-500">학습 완료</div>
+                  <div className="text-xs text-neutral-500">Done</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-neutral-400">
                     {selectedCategoryData.topics.filter((t) => t.value === 0).length}
                   </div>
-                  <div className="text-xs text-neutral-500">미학습</div>
+                  <div className="text-xs text-neutral-500">Todo</div>
                 </div>
               </div>
             </div>

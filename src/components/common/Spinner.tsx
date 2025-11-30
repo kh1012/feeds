@@ -1,17 +1,14 @@
 export function Spinner() {
   return (
-    <div className="flex items-center justify-center gap-1">
-      {Array.from({ length: 6 }).map((_, i) => (
+    <div className="flex items-center justify-center gap-1.5">
+      {Array.from({ length: 5 }).map((_, i) => (
         <span
           key={i}
-          className={`
-            block w-2 h-2 rounded-full bg-[#656d76]
-            animate-[apple-pulse_1s_ease-in-out_infinite]
-          `}
+          className="block w-1.5 h-6 rounded-sm bg-neutral-500 animate-[figma-pulse_1s_ease-in-out_infinite]"
           style={{
-            animationDelay: `${i * 0.1}s`,
+            animationDelay: `${i * 0.12}s`,
           }}
-        ></span>
+        />
       ))}
     </div>
   );

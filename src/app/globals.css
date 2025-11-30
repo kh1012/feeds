@@ -291,3 +291,15 @@ body {
         transform: scale(1);
     }
 }
+
+@keyframes figma-pulse {
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: skewX(-12deg) scaleY(0.6);
+    }
+    50% {
+        opacity: 1;
+        transform: skewX(-12deg) scaleY(1);
+    }
+}
