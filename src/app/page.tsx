@@ -1,12 +1,10 @@
 import HomeViewContent from '@/components/home/HomeViewContent';
-import HomeViewHeader from '@/components/home/HomeViewHeader';
+import GNB from '@/components/common/GNB';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-whitetext-[#1f2328]">
-      <header className="flex items-center justify-between p-4 bg-[#1b1f23]">
-        <HomeViewHeader />
-      </header>
+    <div className="min-h-screen bg-white text-[#1f2328]">
+      <GNB />
       <div className="mx-auto flex w-full max-w-3xl flex-col">
         <main>
           <HomeViewContent />

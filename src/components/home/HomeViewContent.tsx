@@ -26,7 +26,6 @@ export default function HomeViewContent() {
         console.error(err);
         notFound();
       } finally {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         setIsPending(false);
       }
     };

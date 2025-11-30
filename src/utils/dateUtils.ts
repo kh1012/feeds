@@ -21,3 +21,5 @@ export function formatDateWithDay(dateString: string): string {
   return `${year}. ${month}. ${day}. ${dayOfWeek}`;
 }
 
+
+
