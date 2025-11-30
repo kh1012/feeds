@@ -7,6 +7,7 @@ import { TilContentType } from '@/define/tilDefines';
 import { FeedCard } from '@/components/home/FeedCard';
 import { Spinner } from '@/components/common/Spinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
+import { HEIGHTS } from '@/define/heightDefines';
 
 export default function HomeViewContent() {
   const [isPending, setIsPending] = useState(false);
@@ -47,11 +48,12 @@ export default function HomeViewContent() {
         className={
           'w-full flex justify-center text-neutral-600 py-4 text-sm sm:text-base bg-neutral-100'
         }
+        style={{ marginTop: HEIGHTS.GNB_HEIGHT }}
       >
         {contents.length}개의 기록
       </div>
 
-      <div className="w-full flex flex-col">
+      <div className={`w-full flex flex-col`}>
         {contents && contents.map((content) => <FeedCard key={content.title} content={content} />)}
       </div>
     </>

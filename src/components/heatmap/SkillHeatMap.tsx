@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { CategoryTopicData } from './matrixBuilder';
+import { HEIGHTS } from '@/define/heightDefines';
 
 interface SkillHeatMapProps {
   data: CategoryTopicData[];
@@ -19,10 +20,7 @@ function abbreviateTopic(topic: string): string {
 
 // 카테고리명을 표시용으로 변환
 function formatCategoryName(category: string): string {
-  return category
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  return category.split('-').join(' ');
 }
 
 // 값에 따른 색상 강도 계산 (초록색 그라데이션)
@@ -69,7 +67,7 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
   const totalLength = data.map((v) => v.totalValue).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
+    <div className="flex flex-col lg:flex-row gap-6" style={{ marginTop: HEIGHTS.GNB_HEIGHT }}>
       {/* 카테고리 목록 */}
       <div className="lg:w-64 shrink-0">
         <div className={'w-full flex justify-between mb-3'}>

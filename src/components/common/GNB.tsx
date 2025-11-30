@@ -21,16 +21,17 @@ export default function GNB() {
   };
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 bg-[#1b1f23]">
-      <nav className="flex items-center gap-1">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
+    <header className="fixed inset-x-0 z-[9999]">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#1b1f23]">
+        <nav className="flex items-center gap-1">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`
                 px-3 py-1.5 rounded-md text-sm font-medium transition-colors
                 ${
                   isActive
@@ -38,16 +39,17 @@ export default function GNB() {
                     : 'text-neutral-400 hover:text-white hover:bg-white/5'
                 }
               `}
-            >
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
 
-      <Button onClick={onClickGithub} transparent>
-        <IconGithubLogoWhite />
-      </Button>
+        <Button onClick={onClickGithub} transparent>
+          <IconGithubLogoWhite />
+        </Button>
+      </div>
     </header>
   );
 }

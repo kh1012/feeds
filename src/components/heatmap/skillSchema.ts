@@ -10,11 +10,13 @@ export const baseCategories = [
   'css',
   'testing',
   'build-infra',
+  'troubleshoot',
+  'meta',
 ] as const;
 
 export type BaseCategory = (typeof baseCategories)[number];
 
-export const baseTopics: Record<string, string[]> = {
+export const baseTopics: Record<BaseCategory, string[]> = {
   javascript: [
     // 기본기 & 메모리
     'data-types-primitive', // number, string, boolean, null, undefined, symbol, bigint
@@ -185,4 +187,8 @@ export const baseTopics: Record<string, string[]> = {
     'static-assets',
     'environment-config',
   ],
+
+  troubleshoot: [],
+
+  meta: [],
 };
