@@ -53,7 +53,7 @@ export default function HomeViewContent() {
         {contents.length}개의 기록
       </div>
 
-      <div className={`w-full flex flex-col`}>
+      <div className={`w-full flex flex-col gap-2 bg-neutral-50`}>
         {contents && contents.map((content) => <FeedCard key={content.title} content={content} />)}
       </div>
     </>

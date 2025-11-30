@@ -1,17 +1,7 @@
 import matter from 'gray-matter';
-import { fetchTilContents, fetchTilContentMarkdown } from '@/utils/tilUtils';
+import { fetchTilContentMarkdown, fetchTilContents } from '@/utils/tilUtils';
 import { baseCategories, baseTopics } from './skillSchema';
-
-// Front-matter 구조 정의
-export type DocMeta = {
-  type: 'skill' | 'troubleshooting';
-  domain: string;
-  category: string;
-  topic: string;
-  updatedAt: string;
-  keywords: string[];
-  relatedCategories: string[];
-};
+import { DocMeta } from '@/define/metaDefines';
 
 // 모든 TIL md에서 frontmatter 읽어오기 (비동기)
 export async function loadAllDocs(): Promise<DocMeta[]> {

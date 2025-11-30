@@ -12,28 +12,38 @@ import rehypeHighlight from 'rehype-highlight';
 import { parseMarkdownWithMeta } from '@/utils/mdParseUtils';
 import { formatDateWithDay } from '@/utils/dateUtils';
 import Button from '@/components/common/Button';
+import { DocMeta } from '@/define/metaDefines';
+import Tag from '@/components/common/Tag';
 
 interface FeedCardProps {
   content: TilContentType;
 }
 
 export const FeedCard = ({ content }: FeedCardProps) => {
+  const [docMeta, setDocMeta] = useState<DocMeta | null>(null);
   const [markdownValue, setMarkdownValue] = useState<string>('');
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [keywordsExpanded, setKeywordsExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     const asyncF = async () => {
       try {
         const md = await fetchTilContentMarkdown(content.rawUrl);
         const { meta, writing } = parseMarkdownWithMeta(md);
-        return writing;
+        return {
+          meta,
+          writing,
+        };
       } catch (err) {
         console.error(err);
         notFound();
       }
     };
 
-    asyncF().then((r) => setMarkdownValue(r));
+    asyncF().then((r) => {
+      setDocMeta(r.meta);
+      setMarkdownValue(r.writing);
+    });
   }, [content.rawUrl]);
 
   if (!markdownValue) {
@@ -54,8 +64,17 @@ export const FeedCard = ({ content }: FeedCardProps) => {
     setExpanded(!expanded);
   };
 
+  // keywords 3개까지만 노출 많을 시 ... 처리
+  const keywords = docMeta?.keywords ?? [];
+  const isLongKeywords = keywords.length > 5;
+  const displayKeywords = isLongKeywords && !keywordsExpanded ? keywords.slice(0, 5) : keywords;
+
+  const onClickKeywordsExpandHandler = () => {
+    setKeywordsExpanded(!keywordsExpanded);
+  };
+
   return (
-    <article className="w-full bg-white flex justify-center border-t border-neutral-200">
+    <article className="w-full bg-white flex justify-center ">
       <div className="w-full flex flex-col gap-4 text-[#1f2328] p-4 bg-white sm:p-8 sm:max-w-3xl">
         <header className="flex gap-4">
           <div className="relative">
@@ -88,6 +107,18 @@ export const FeedCard = ({ content }: FeedCardProps) => {
           </div>
         </header>
 
+        <div className="flex flex-row flex-wrap gap-2">
+          {displayKeywords?.map((keyword) => (
+            <Tag key={keyword}>{keyword}</Tag>
+          ))}
+
+          {isLongKeywords && (
+            <Button onClick={onClickKeywordsExpandHandler} transparent>
+              <span className={'text-sm text-blue-400'}>{!keywordsExpanded ? '...' : ''}</span>
+            </Button>
+          )}
+        </div>
+
         <div className="prose-github max-w-none mt-4 text-[#1f2328]">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
             {displayedMarkdown}
@@ -96,7 +127,11 @@ export const FeedCard = ({ content }: FeedCardProps) => {
 
         {isLong && (
           <div className={'flex justify-center'}>
-            <Button onClick={onClickExpandHandler}>{expanded ? '접기' : '더보기'}</Button>
+            <Button onClick={onClickExpandHandler} transparent>
+              <span className={'text-blue-500 text-sm sm:text-base'}>
+                {expanded ? '접기' : '더보기'}
+              </span>
+            </Button>
           </div>
         )}
       </div>

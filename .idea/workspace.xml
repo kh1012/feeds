@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="GNB Layout단으로 이동">
-      <change afterPath="$PROJECT_DIR$/src/define/heightDefines.ts" afterDir="false" />
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="GNB fixed 변경">
+      <change afterPath="$PROJECT_DIR$/src/components/common/Tag.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/define/metaDefines.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/GNB.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/GNB.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/heatmap/SkillHeatMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/heatmap/SkillHeatMap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/heatmap/skillSchema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/heatmap/skillSchema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/heatmap/matrixBuilder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/heatmap/matrixBuilder.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/mdParseUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mdParseUtils.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +102,8 @@
       <workItem from="1764313677110" duration="12884000" />
       <workItem from="1764488012370" duration="243000" />
       <workItem from="1764488264126" duration="2413000" />
-      <workItem from="1764491339517" duration="2623000" />
+      <workItem from="1764491339517" duration="2653000" />
+      <workItem from="1764495301990" duration="1360000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
@@ -199,7 +201,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764494070803</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="GNB fixed 변경">
+      <option name="closed" value="true" />
+      <created>1764495202310</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1764495202310</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,6 +228,7 @@
     <MESSAGE value="스피너 스타일링 변경" />
     <MESSAGE value="Feeds 부분 구분선 스타일링 변경" />
     <MESSAGE value="GNB Layout단으로 이동" />
-    <option name="LAST_COMMIT_MESSAGE" value="GNB Layout단으로 이동" />
+    <MESSAGE value="GNB fixed 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value="GNB fixed 변경" />
   </component>
 </project>

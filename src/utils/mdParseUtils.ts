@@ -1,17 +1,8 @@
 import matter from 'gray-matter';
-
-export type Meta = {
-  title: string;
-  date: string;
-  type?: string;
-  tags?: string[];
-  summary?: string;
-  featured?: boolean;
-  [key: string]: any;
-};
+import { DocMeta } from '@/define/metaDefines';
 
 export type ParsedMarkdown = {
-  meta: Meta;
+  meta: DocMeta;
   writing: string;
 };
 
@@ -19,7 +10,7 @@ export function parseMarkdownWithMeta(raw: string): ParsedMarkdown {
   const { data, content } = matter(raw);
 
   return {
-    meta: data as Meta,
+    meta: data as DocMeta,
     writing: content,
   };
 }
