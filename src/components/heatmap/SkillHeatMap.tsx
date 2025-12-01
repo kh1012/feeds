@@ -119,7 +119,7 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
       </div>
 
       {/* 토픽 그리드 영역 */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-hidden">
         {!selectedCategory ? (
           <div className="flex items-center justify-center h-64 bg-neutral-50 rounded-xl border-2 border-dashed border-neutral-200">
             <div className="text-center">
