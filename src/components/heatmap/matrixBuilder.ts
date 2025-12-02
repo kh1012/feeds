@@ -29,7 +29,6 @@ export async function loadAllDocs(): Promise<DocMeta[]> {
 
       // 필수 필드 검증
       if (!data?.type || !data?.category || !data?.topic) continue;
-      if (data.type !== 'skill' && data.type !== 'troubleshooting') continue;
 
       docs.push({
         type: data.type,

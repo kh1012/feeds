@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="GNB fixed 변경">
-      <change afterPath="$PROJECT_DIR$/src/components/common/Tag.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/define/metaDefines.ts" afterDir="false" />
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="지침용 RULE.md 축가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/heatmap/matrixBuilder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/heatmap/matrixBuilder.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/FeedCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/mdParseUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mdParseUtils.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,6 +98,7 @@
       <workItem from="1764488264126" duration="2413000" />
       <workItem from="1764491339517" duration="2653000" />
       <workItem from="1764495301990" duration="1360000" />
+      <workItem from="1764590631439" duration="758000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />
@@ -209,7 +204,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764495202310</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="지침용 RULE.md 축가">
+      <option name="closed" value="true" />
+      <created>1764590773726</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1764590773726</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,6 +232,7 @@
     <MESSAGE value="Feeds 부분 구분선 스타일링 변경" />
     <MESSAGE value="GNB Layout단으로 이동" />
     <MESSAGE value="GNB fixed 변경" />
-    <option name="LAST_COMMIT_MESSAGE" value="GNB fixed 변경" />
+    <MESSAGE value="지침용 RULE.md 축가" />
+    <option name="LAST_COMMIT_MESSAGE" value="지침용 RULE.md 축가" />
   </component>
 </project>

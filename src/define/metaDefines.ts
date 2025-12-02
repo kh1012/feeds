@@ -1,5 +1,5 @@
 export type DocMeta = {
-  type: 'skill' | 'troubleshooting';
+  type: string;
   domain: string;
   category: string;
   topic: string;
