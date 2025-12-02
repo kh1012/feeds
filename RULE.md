@@ -6,6 +6,10 @@ category: "learning-system"
 topic: "skill-matrix-design"
 updatedAt: "2025-11-30"
 
+satisfaction:
+  score: 90
+  reason: 하루를 관통하면서 의미있는 결과를 도출해낸 것 같음.
+
 keywords:
 
 - "skill-matrix"

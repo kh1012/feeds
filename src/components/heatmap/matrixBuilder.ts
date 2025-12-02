@@ -45,6 +45,19 @@ export async function loadAllDocsWithUrl(): Promise<DocMetaWithUrl[]> {
       // 필수 필드 검증
       if (!data?.type || !data?.category || !data?.topic) continue;
 
+      // satisfaction 파싱 (객체 형태: { score, reason })
+      let satisfaction = undefined;
+      if (data.satisfaction && typeof data.satisfaction === 'object') {
+        const score = data.satisfaction.score;
+        const reason = data.satisfaction.reason;
+        if (typeof score === 'number' && score >= 0 && score <= 100) {
+          satisfaction = {
+            score,
+            reason: reason ? String(reason) : '',
+          };
+        }
+      }
+
       docs.push({
         type: data.type,
         domain: String(data.domain ?? 'frontend').toLowerCase(),
@@ -55,6 +68,7 @@ export async function loadAllDocsWithUrl(): Promise<DocMetaWithUrl[]> {
         relatedCategories: Array.isArray(data.relatedCategories)
           ? data.relatedCategories.map(String)
           : [],
+        satisfaction,
         rawUrl: result.til.rawUrl,
         url: result.til.url,
         title: result.til.title,

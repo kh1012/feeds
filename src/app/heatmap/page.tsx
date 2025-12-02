@@ -1,37 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getDomainBasedHeatmapData, DomainTreeData } from '@/components/heatmap/matrixBuilder';
 import SkillHeatmap from '@/components/heatmap/SkillHeatMap';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { Spinner } from '@/components/common/Spinner';
+import { useGetHeatmapData } from '@/hooks/useGetHeatmapData';
 
 export default function HeatmapPage() {
-  const [isPending, setIsPending] = useState(false);
-  const [data, setData] = useState<DomainTreeData[]>([]);
+  const { data, isPending, isFetching, isError } = useGetHeatmapData();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsPending(true);
-
-      try {
-        const heatmapData = await getDomainBasedHeatmapData();
-        setData(heatmapData);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsPending(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (data.length === 0 || isPending) {
+  // 최초 로딩 시에만 스피너 표시 (캐시된 데이터가 있으면 표시 안 함)
+  if (isPending && !data) {
     return (
       <PortalOverlay>
         <Spinner />
       </PortalOverlay>
+    );
+  }
+
+  if (isError || !data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64 text-neutral-500">
+        데이터를 불러올 수 없습니다.
+      </div>
     );
   }
 

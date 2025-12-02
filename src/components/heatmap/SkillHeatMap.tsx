@@ -250,10 +250,24 @@ function FloatingCardPanel({
 }
 
 export default function SkillHeatMap({ data }: SkillHeatMapProps) {
+  // 선택된 카테고리가 속한 도메인 찾기
+  const findDomainForCategory = (category: string | null): string | null => {
+    if (!category) return null;
+    for (const domain of data) {
+      if (domain.categories.some((c) => c.category === category)) {
+        return domain.domain;
+      }
+    }
+    return null;
+  };
+
+  const initialSelectedCategory = 'javascript';
+  const initialDomain = findDomainForCategory(initialSelectedCategory);
+
   const [expandedDomains, setExpandedDomains] = useState<Set<string>>(
-    new Set(data.map((d) => d.domain))
+    new Set(initialDomain ? [initialDomain] : [])
   );
-  const [selectedCategory, setSelectedCategory] = useState<string | null>('javascript');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialSelectedCategory);
   const [selectedTopic, setSelectedTopic] = useState<{
     name: string;
     docs: TopicDocInfo[];
@@ -416,7 +430,7 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
 
                 {/* 카테고리 목록 (데이터가 있는 것만 표시) */}
                 {isExpanded && (
-                  <div className="mt-1 space-y-0.5">
+                  <div className="mt-1 ml-6 mr-2 space-y-1">
                     {domainData.categories.map((cat) => {
                       const isSelected = selectedCategory === cat.category;
                       const progress = calculateCategoryProgress(cat);
@@ -430,43 +444,45 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                             setFloatingPosition(null);
                           }}
                           className={`
-                            w-full h-8 flex items-center justify-between pl-8 pr-4
-                            transition-all cursor-pointer text-left relative overflow-hidden
+                            w-full h-10 flex flex-col justify-center gap-1 px-2 relative
+                            transition-all cursor-pointer text-left rounded-md
+                            before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-0.5 before:rounded-full before:transition-colors
                             ${
                               isSelected
-                                ? 'border-l-2 border-l-blue-500'
-                                : 'hover:bg-neutral-50 hover:rounded-md border-l-2 border-l-transparent'
+                                ? 'before:bg-blue-500'
+                                : 'hover:bg-neutral-50 before:bg-transparent'
                             }
                           `}
                         >
-                          {/* 진행률 바 배경 */}
-                          <div
-                            className="absolute left-0 top-0 h-full transition-all duration-300"
-                            style={{
-                              width: `${progress}%`,
-                              backgroundColor: isSelected
-                                ? 'rgba(59, 130, 246, 0.15)'
-                                : 'rgba(0, 0, 0, 0.04)',
-                            }}
-                          />
-
-                          <div className="relative flex items-center gap-2">
-                            <CategoryIcon category={cat.category} />
+                          <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center gap-2">
+                              <CategoryIcon category={cat.category} />
+                              <span
+                                className={`text-sm ${
+                                  isSelected ? 'font-medium text-blue-700' : 'text-neutral-700'
+                                }`}
+                              >
+                                {formatCategoryName(cat.category)}
+                              </span>
+                            </div>
                             <span
-                              className={`text-sm ${
-                                isSelected ? 'font-medium text-blue-700' : 'text-neutral-700'
+                              className={`text-xs ${
+                                isSelected ? 'text-blue-600' : 'text-neutral-400'
                               }`}
                             >
-                              {formatCategoryName(cat.category)}
+                              {cat.totalValue}
                             </span>
                           </div>
-                          <span
-                            className={`relative text-xs ${
-                              isSelected ? 'text-blue-600' : 'text-neutral-400'
-                            }`}
-                          >
-                            {cat.totalValue}
-                          </span>
+                          {/* 하단 프로그레스 바 */}
+                          <div className="w-full h-1 bg-neutral-100 rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full transition-all duration-300"
+                              style={{
+                                width: `${progress}%`,
+                                backgroundColor: isSelected ? '#3b82f6' : '#93c5fd',
+                              }}
+                            />
+                          </div>
                         </button>
                       );
                     })}

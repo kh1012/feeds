@@ -9,6 +9,7 @@ import IconGithubLogoWhite from '@/icons/githubLogoWhite';
 const navItems = [
   { href: '/', label: 'Feeds' },
   { href: '/heatmap', label: 'Heatmap' },
+  { href: '/insights', label: 'Insights' },
 ] as const;
 
 export default function GNB() {
