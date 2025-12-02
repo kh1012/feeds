@@ -6,7 +6,6 @@ import { Spinner } from '@/components/common/Spinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { HEIGHTS } from '@/define/heightDefines';
 import { useGetFeedContents, extractFilters, filterDocs } from '@/hooks/useGetFeedContents';
-import SatisfactionDashboard from './SatisfactionDashboard';
 
 // 카테고리명 포맷팅
 function formatName(name: string): string {
@@ -93,9 +92,17 @@ export default function HomeViewContent() {
       {/* 모바일: 상단 필터 (접히는 형태) */}
       <div className="lg:hidden bg-white border-b border-neutral-200">
         {/* 기록 카운트 + 토글 버튼 */}
-        <button
+        <div
+          role="button"
+          tabIndex={0}
           onClick={() => setMobileFilterExpanded(!mobileFilterExpanded)}
-          className="w-full px-4 py-3 flex items-center justify-between"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setMobileFilterExpanded(!mobileFilterExpanded);
+            }
+          }}
+          className="w-full px-4 py-3 flex items-center justify-between cursor-pointer"
         >
           <div className="flex items-center gap-2">
             <span className="text-base font-semibold text-neutral-800">
@@ -135,7 +142,7 @@ export default function HomeViewContent() {
               />
             </svg>
           </div>
-        </button>
+        </div>
 
         {/* 확장되는 필터 영역 */}
         {mobileFilterExpanded && (
@@ -307,21 +314,11 @@ export default function HomeViewContent() {
                     )}
                   </div>
                 </div>
-
-                {/* 만족도 대시보드 - PC에서는 좌측에 표시 */}
-                <div className="mt-4">
-                  <SatisfactionDashboard contents={filteredContents} compact />
-                </div>
               </div>
             </aside>
 
             {/* 피드 영역 */}
             <div className="flex-1 min-w-0" style={{ maxWidth: 1000 }}>
-              {/* 모바일: 만족도 대시보드 */}
-              <div className="lg:hidden">
-                <SatisfactionDashboard contents={filteredContents} />
-              </div>
-
               {/* 피드 카드 목록 */}
               <div className="flex flex-col gap-2 lg:gap-4">
                 {filteredContents.map((content) => (

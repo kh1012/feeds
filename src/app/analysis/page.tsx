@@ -3,10 +3,10 @@
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { Spinner } from '@/components/common/Spinner';
 import { useGetFeedContents } from '@/hooks/useGetFeedContents';
-import InsightsDashboard from '@/components/insights/InsightsDashboard';
+import AnalysisDashboard from '@/components/analysis/AnalysisDashboard';
 import { HEIGHTS } from '@/define/heightDefines';
 
-export default function InsightsPage() {
+export default function AnalysisPage() {
   const { data, isPending, isError } = useGetFeedContents();
 
   if (isPending && !data) {
@@ -30,7 +30,7 @@ export default function InsightsPage() {
 
   return (
     <div className="bg-neutral-50 min-h-screen" style={{ paddingTop: HEIGHTS.GNB_HEIGHT }}>
-      <InsightsDashboard data={data} />
+      <AnalysisDashboard data={data} />
     </div>
   );
 }
