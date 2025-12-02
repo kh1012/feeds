@@ -1,21 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCategoryBasedHeatmapData, CategoryTopicData } from '@/components/heatmap/matrixBuilder';
+import { getDomainBasedHeatmapData, DomainTreeData } from '@/components/heatmap/matrixBuilder';
 import SkillHeatmap from '@/components/heatmap/SkillHeatMap';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { Spinner } from '@/components/common/Spinner';
 
 export default function HeatmapPage() {
   const [isPending, setIsPending] = useState(false);
-  const [data, setData] = useState<CategoryTopicData[]>([]);
+  const [data, setData] = useState<DomainTreeData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsPending(true);
 
       try {
-        const heatmapData = await getCategoryBasedHeatmapData();
+        const heatmapData = await getDomainBasedHeatmapData();
         setData(heatmapData);
       } catch (err) {
         console.error(err);
@@ -36,7 +36,7 @@ export default function HeatmapPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 sm:p-8 mx-auto" style={{ maxWidth: 1248 }}>
       <SkillHeatmap data={data} />
     </div>
   );

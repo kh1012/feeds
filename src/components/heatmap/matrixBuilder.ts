@@ -2,17 +2,32 @@ import matter from 'gray-matter';
 import { fetchTilContentMarkdown, fetchTilContents } from '@/utils/tilUtils';
 import { baseCategories, baseTopics } from './skillSchema';
 import { DocMeta } from '@/define/metaDefines';
+import { TilContentType } from '@/define/tilDefines';
+
+// URL이 포함된 문서 메타 타입
+export type DocMetaWithUrl = DocMeta & {
+  rawUrl: string;
+  url: string;
+  title: string;
+  date: string;
+};
 
 // 모든 TIL md에서 frontmatter 읽어오기 (비동기)
 export async function loadAllDocs(): Promise<DocMeta[]> {
+  const result = await loadAllDocsWithUrl();
+  return result;
+}
+
+// URL 정보가 포함된 문서 로드
+export async function loadAllDocsWithUrl(): Promise<DocMetaWithUrl[]> {
   const tilContents = await fetchTilContents();
-  const docs: DocMeta[] = [];
+  const docs: DocMetaWithUrl[] = [];
 
   // 모든 md 파일의 raw content를 병렬로 가져오기
-  const markdownPromises = tilContents.map(async (til) => {
+  const markdownPromises = tilContents.map(async (til: TilContentType) => {
     try {
       const markdown = await fetchTilContentMarkdown(til.rawUrl);
-      return { rawUrl: til.rawUrl, markdown };
+      return { til, markdown };
     } catch {
       console.warn(`Failed to fetch: ${til.rawUrl}`);
       return null;
@@ -40,9 +55,13 @@ export async function loadAllDocs(): Promise<DocMeta[]> {
         relatedCategories: Array.isArray(data.relatedCategories)
           ? data.relatedCategories.map(String)
           : [],
+        rawUrl: result.til.rawUrl,
+        url: result.til.url,
+        title: result.til.title,
+        date: result.til.date,
       });
     } catch {
-      console.warn(`Failed to parse frontmatter: ${result.rawUrl}`);
+      console.warn(`Failed to parse frontmatter: ${result.til.rawUrl}`);
     }
   }
 
@@ -106,29 +125,45 @@ export async function getHeatmapData() {
   return buildHeatmapMatrix(docs);
 }
 
+// 토픽 관련 문서 정보
+export type TopicDocInfo = {
+  rawUrl: string;
+  url: string;
+  title: string;
+  date: string;
+};
+
 // 카테고리별 토픽-값 데이터 구조
 export type CategoryTopicData = {
   category: string;
   topics: Array<{
     name: string;
     value: number;
+    docs: TopicDocInfo[];
   }>;
   totalValue: number;
 };
 
-// 카테고리별 히트맵 데이터 생성 (비동기)
+// Domain 기반 트리 구조 데이터
+export type DomainTreeData = {
+  domain: string;
+  categories: CategoryTopicData[];
+  totalValue: number;
+};
+
+// 카테고리별 히트맵 데이터 생성 (비동기) - deprecated, getDomainBasedHeatmapData 사용 권장
 export async function getCategoryBasedHeatmapData(): Promise<CategoryTopicData[]> {
-  const docs = await loadAllDocs();
+  const docs = await loadAllDocsWithUrl();
 
   // 카테고리별 토픽 값 계산
-  const categoryMap = new Map<string, Map<string, number>>();
+  const categoryMap = new Map<string, Map<string, TopicData>>();
 
   // baseCategories 기준으로 초기화
   for (const cat of baseCategories) {
-    const topicMap = new Map<string, number>();
+    const topicMap = new Map<string, TopicData>();
     const topics = baseTopics[cat] ?? [];
     for (const topic of topics) {
-      topicMap.set(topic, 0);
+      topicMap.set(topic, { value: 0, docs: [] });
     }
     categoryMap.set(cat, topicMap);
   }
@@ -138,13 +173,22 @@ export async function getCategoryBasedHeatmapData(): Promise<CategoryTopicData[]
     const topicMap = categoryMap.get(doc.category);
     if (!topicMap) {
       // 새로운 카테고리인 경우
-      const newTopicMap = new Map<string, number>();
-      newTopicMap.set(doc.topic, doc.type === 'troubleshooting' ? 2 : 1);
+      const newTopicMap = new Map<string, TopicData>();
+      newTopicMap.set(doc.topic, {
+        value: doc.type === 'troubleshooting' ? 2 : 1,
+        docs: [{ rawUrl: doc.rawUrl, url: doc.url, title: doc.title, date: doc.date }],
+      });
       categoryMap.set(doc.category, newTopicMap);
     } else {
-      const currentValue = topicMap.get(doc.topic) ?? 0;
+      const current = topicMap.get(doc.topic) ?? { value: 0, docs: [] };
       const weight = doc.type === 'troubleshooting' ? 2 : 1;
-      topicMap.set(doc.topic, currentValue + weight);
+      topicMap.set(doc.topic, {
+        value: current.value + weight,
+        docs: [
+          ...current.docs,
+          { rawUrl: doc.rawUrl, url: doc.url, title: doc.title, date: doc.date },
+        ],
+      });
     }
   }
 
@@ -152,9 +196,10 @@ export async function getCategoryBasedHeatmapData(): Promise<CategoryTopicData[]
   const result: CategoryTopicData[] = [];
 
   for (const [category, topicMap] of categoryMap) {
-    const topics = Array.from(topicMap.entries()).map(([name, value]) => ({
+    const topics = Array.from(topicMap.entries()).map(([name, data]) => ({
       name,
-      value,
+      value: data.value,
+      docs: data.docs,
     }));
 
     const totalValue = topics.reduce((sum, t) => sum + t.value, 0);
@@ -175,6 +220,116 @@ export async function getCategoryBasedHeatmapData(): Promise<CategoryTopicData[]
     if (aIdx === -1) return 1;
     if (bIdx === -1) return -1;
     return aIdx - bIdx;
+  });
+
+  return result;
+}
+
+// 토픽별 데이터 (값 + 문서 목록)
+type TopicData = {
+  value: number;
+  docs: TopicDocInfo[];
+};
+
+// Domain 기반 트리 구조 히트맵 데이터 생성 (비동기)
+export async function getDomainBasedHeatmapData(): Promise<DomainTreeData[]> {
+  const docs = await loadAllDocsWithUrl();
+
+  // Domain > Category > Topic 구조로 데이터 구성
+  // Map<domain, Map<category, Map<topic, TopicData>>>
+  const domainMap = new Map<string, Map<string, Map<string, TopicData>>>();
+
+  // baseCategories 기준으로 초기화 (frontend domain에 배치)
+  const frontendCategoryMap = new Map<string, Map<string, TopicData>>();
+  for (const cat of baseCategories) {
+    const topicMap = new Map<string, TopicData>();
+    const topics = baseTopics[cat] ?? [];
+    for (const topic of topics) {
+      topicMap.set(topic, { value: 0, docs: [] });
+    }
+    frontendCategoryMap.set(cat, topicMap);
+  }
+  domainMap.set('frontend', frontendCategoryMap);
+
+  // 문서 데이터 반영
+  for (const doc of docs) {
+    const domain = doc.domain || 'frontend';
+
+    if (!domainMap.has(domain)) {
+      domainMap.set(domain, new Map());
+    }
+
+    const categoryMap = domainMap.get(domain)!;
+
+    if (!categoryMap.has(doc.category)) {
+      categoryMap.set(doc.category, new Map());
+    }
+
+    const topicMap = categoryMap.get(doc.category)!;
+    const current = topicMap.get(doc.topic) ?? { value: 0, docs: [] };
+    const weight = doc.type === 'troubleshooting' ? 2 : 1;
+
+    topicMap.set(doc.topic, {
+      value: current.value + weight,
+      docs: [
+        ...current.docs,
+        {
+          rawUrl: doc.rawUrl,
+          url: doc.url,
+          title: doc.title,
+          date: doc.date,
+        },
+      ],
+    });
+  }
+
+  // 결과 배열로 변환
+  const result: DomainTreeData[] = [];
+
+  for (const [domain, categoryMap] of domainMap) {
+    const categories: CategoryTopicData[] = [];
+
+    for (const [category, topicMap] of categoryMap) {
+      const topics = Array.from(topicMap.entries()).map(([name, data]) => ({
+        name,
+        value: data.value,
+        docs: data.docs,
+      }));
+
+      const totalValue = topics.reduce((sum, t) => sum + t.value, 0);
+
+      categories.push({
+        category,
+        topics,
+        totalValue,
+      });
+    }
+
+    // 카테고리 정렬
+    categories.sort((a, b) => {
+      const aIdx = (baseCategories as readonly string[]).indexOf(a.category);
+      const bIdx = (baseCategories as readonly string[]).indexOf(b.category);
+
+      if (aIdx === -1 && bIdx === -1) return a.category.localeCompare(b.category);
+      if (aIdx === -1) return 1;
+      if (bIdx === -1) return -1;
+      return aIdx - bIdx;
+    });
+
+    const domainTotal = categories.reduce((sum, c) => sum + c.totalValue, 0);
+
+    result.push({
+      domain,
+      categories,
+      totalValue: domainTotal,
+    });
+  }
+
+  // domain 정렬: frontend 먼저, 나머지는 알파벳순
+  result.sort((a, b) => {
+    if (a.domain === 'frontend') return -1;
+    if (b.domain === 'frontend') return 1;
+    return a.domain.localeCompare(b.domain);
   });
 
   return result;
