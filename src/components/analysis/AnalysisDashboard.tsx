@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { DocMetaWithUrl } from '@/components/heatmap/matrixBuilder';
+import ReviewList from './ReviewList';
 
 interface AnalysisDashboardProps {
   data: DocMetaWithUrl[];
@@ -17,10 +18,17 @@ const SCORE_RANGES = [
 ];
 
 // 사분면 타입
-type Quadrant = 'high-freq-high-sat' | 'low-freq-high-sat' | 'high-freq-low-sat' | 'low-freq-low-sat';
+type Quadrant =
+  | 'high-freq-high-sat'
+  | 'low-freq-high-sat'
+  | 'high-freq-low-sat'
+  | 'low-freq-low-sat';
 
 // 사분면 정보
-const QUADRANT_INFO: Record<Quadrant, { label: string; emoji: string; color: string; bgColor: string; description: string }> = {
+const QUADRANT_INFO: Record<
+  Quadrant,
+  { label: string; emoji: string; color: string; bgColor: string; description: string }
+> = {
   'high-freq-high-sat': {
     label: '마스터',
     emoji: '🏆',
@@ -100,10 +108,10 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
     const dist = SCORE_RANGES.map((range) => ({
       ...range,
       count: dataWithSatisfaction.filter(
-        (d) => d.satisfaction!.score >= range.min && d.satisfaction!.score <= range.max
+        (d) => d.satisfaction!.score >= range.min && d.satisfaction!.score <= range.max,
       ).length,
       items: dataWithSatisfaction.filter(
-        (d) => d.satisfaction!.score >= range.min && d.satisfaction!.score <= range.max
+        (d) => d.satisfaction!.score >= range.min && d.satisfaction!.score <= range.max,
       ),
     }));
     return dist;
@@ -111,7 +119,10 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
 
   // 카테고리별 평균 만족도
   const categoryStats = useMemo(() => {
-    const categoryMap = new Map<string, { total: number; count: number; items: DocMetaWithUrl[] }>();
+    const categoryMap = new Map<
+      string,
+      { total: number; count: number; items: DocMetaWithUrl[] }
+    >();
 
     for (const doc of dataWithSatisfaction) {
       const existing = categoryMap.get(doc.category);
@@ -239,14 +250,17 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
 
   // 토픽별 집계 (사분면 차트용)
   const topicAggregations = useMemo(() => {
-    const topicMap = new Map<string, {
-      category: string;
-      domain: string;
-      count: number;
-      totalSatisfaction: number;
-      satisfactionCount: number;
-      reasons: string[];
-    }>();
+    const topicMap = new Map<
+      string,
+      {
+        category: string;
+        domain: string;
+        count: number;
+        totalSatisfaction: number;
+        satisfactionCount: number;
+        reasons: string[];
+      }
+    >();
 
     for (const doc of data) {
       const key = `${doc.domain}-${doc.category}-${doc.topic}`;
@@ -281,9 +295,8 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
 
     topicMap.forEach((value, key) => {
       const topic = key.split('-').slice(2).join('-');
-      const avgSat = value.satisfactionCount > 0
-        ? value.totalSatisfaction / value.satisfactionCount
-        : 0;
+      const avgSat =
+        value.satisfactionCount > 0 ? value.totalSatisfaction / value.satisfactionCount : 0;
 
       counts.push(value.count);
       if (avgSat > 0) satisfactions.push(avgSat);
@@ -299,12 +312,12 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
       });
     });
 
-    const medianCount = counts.length > 0
-      ? counts.sort((a, b) => a - b)[Math.floor(counts.length / 2)]
-      : 1;
-    const medianSat = satisfactions.length > 0
-      ? satisfactions.sort((a, b) => a - b)[Math.floor(satisfactions.length / 2)]
-      : 3;
+    const medianCount =
+      counts.length > 0 ? counts.sort((a, b) => a - b)[Math.floor(counts.length / 2)] : 1;
+    const medianSat =
+      satisfactions.length > 0
+        ? satisfactions.sort((a, b) => a - b)[Math.floor(satisfactions.length / 2)]
+        : 3;
 
     for (const agg of aggregations) {
       const isHighFreq = agg.count >= medianCount;
@@ -321,7 +334,7 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
 
   // 만족도 데이터가 있는 항목만 필터링 (사분면용)
   const itemsWithSatisfaction = topicAggregations.aggregations.filter(
-    (agg) => agg.avgSatisfaction > 0
+    (agg) => agg.avgSatisfaction > 0,
   );
 
   // 사분면별 카운트
@@ -347,7 +360,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
         <div className="mx-auto px-4 lg:px-6 py-8" style={{ maxWidth: 1248 }}>
           <div className="bg-white rounded-lg border border-neutral-200 p-8 text-center">
             <div className="text-4xl mb-4">📊</div>
-            <h2 className="text-lg font-semibold text-neutral-800 mb-2">만족도 데이터가 없습니다</h2>
+            <h2 className="text-lg font-semibold text-neutral-800 mb-2">
+              만족도 데이터가 없습니다
+            </h2>
             <p className="text-sm text-neutral-500">
               마크다운 파일의 frontmatter에 satisfaction 데이터를 추가하면
               <br />
@@ -356,7 +371,7 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
             <div className="mt-6 p-4 bg-neutral-50 rounded-lg text-left">
               <p className="text-xs text-neutral-500 mb-2">예시:</p>
               <pre className="text-xs text-neutral-700 font-mono">
-{`satisfaction:
+                {`satisfaction:
   score: 85
   reason: 실무에 바로 적용 가능한 내용이어서 만족`}
               </pre>
@@ -387,7 +402,7 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
       <div className="mx-auto px-4 lg:px-6 py-6" style={{ maxWidth: 1248 }}>
         {/* 헤더 */}
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-neutral-900">📊 Learning Analysis</h1>
+          <h1 className="text-xl font-bold text-neutral-900">Analysis Dashboard</h1>
           <p className="text-sm text-neutral-500 mt-1">
             스코어링 기반 정적 분석 · {stats?.total}개 컨텐츠 분석 결과
           </p>
@@ -440,7 +455,11 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                     fill="#dbeafe"
                     opacity={selectedQuadrant === 'low-freq-high-sat' ? 0.8 : 0.3}
                     className="cursor-pointer transition-opacity"
-                    onClick={() => setSelectedQuadrant(selectedQuadrant === 'low-freq-high-sat' ? null : 'low-freq-high-sat')}
+                    onClick={() =>
+                      setSelectedQuadrant(
+                        selectedQuadrant === 'low-freq-high-sat' ? null : 'low-freq-high-sat',
+                      )
+                    }
                   />
                   <rect
                     x={padding + plotSize / 2}
@@ -450,7 +469,11 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                     fill="#d1fae5"
                     opacity={selectedQuadrant === 'high-freq-high-sat' ? 0.8 : 0.3}
                     className="cursor-pointer transition-opacity"
-                    onClick={() => setSelectedQuadrant(selectedQuadrant === 'high-freq-high-sat' ? null : 'high-freq-high-sat')}
+                    onClick={() =>
+                      setSelectedQuadrant(
+                        selectedQuadrant === 'high-freq-high-sat' ? null : 'high-freq-high-sat',
+                      )
+                    }
                   />
                   <rect
                     x={padding}
@@ -460,7 +483,11 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                     fill="#fee2e2"
                     opacity={selectedQuadrant === 'low-freq-low-sat' ? 0.8 : 0.3}
                     className="cursor-pointer transition-opacity"
-                    onClick={() => setSelectedQuadrant(selectedQuadrant === 'low-freq-low-sat' ? null : 'low-freq-low-sat')}
+                    onClick={() =>
+                      setSelectedQuadrant(
+                        selectedQuadrant === 'low-freq-low-sat' ? null : 'low-freq-low-sat',
+                      )
+                    }
                   />
                   <rect
                     x={padding + plotSize / 2}
@@ -470,7 +497,11 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                     fill="#fef3c7"
                     opacity={selectedQuadrant === 'high-freq-low-sat' ? 0.8 : 0.3}
                     className="cursor-pointer transition-opacity"
-                    onClick={() => setSelectedQuadrant(selectedQuadrant === 'high-freq-low-sat' ? null : 'high-freq-low-sat')}
+                    onClick={() =>
+                      setSelectedQuadrant(
+                        selectedQuadrant === 'high-freq-low-sat' ? null : 'high-freq-low-sat',
+                      )
+                    }
                   />
 
                   {/* 축 */}
@@ -512,7 +543,12 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                   />
 
                   {/* 축 라벨 */}
-                  <text x={chartSize / 2} y={chartSize - 8} textAnchor="middle" className="text-[10px] fill-neutral-500">
+                  <text
+                    x={chartSize / 2}
+                    y={chartSize - 8}
+                    textAnchor="middle"
+                    className="text-[10px] fill-neutral-500"
+                  >
                     학습 빈도 →
                   </text>
                   <text
@@ -542,9 +578,14 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                           strokeWidth={isHovered ? 2 : 1}
                           className="cursor-pointer transition-all"
                           style={{
-                            fill: item.quadrant === 'high-freq-high-sat' ? '#10b981' :
-                                  item.quadrant === 'low-freq-high-sat' ? '#3b82f6' :
-                                  item.quadrant === 'high-freq-low-sat' ? '#f59e0b' : '#ef4444',
+                            fill:
+                              item.quadrant === 'high-freq-high-sat'
+                                ? '#10b981'
+                                : item.quadrant === 'low-freq-high-sat'
+                                  ? '#3b82f6'
+                                  : item.quadrant === 'high-freq-low-sat'
+                                    ? '#f59e0b'
+                                    : '#ef4444',
                             opacity: isHovered ? 1 : 0.7,
                           }}
                           onMouseEnter={() => setHoveredTopic(item)}
@@ -571,18 +612,23 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                         onClick={() => setSelectedQuadrant(isSelected ? null : quadrant)}
                         className={`
                           p-2 rounded-lg text-left transition-all border
-                          ${isSelected
-                            ? `${info.bgColor} border-current ${info.color}`
-                            : 'bg-neutral-50 border-transparent hover:bg-neutral-100'
+                          ${
+                            isSelected
+                              ? `${info.bgColor} border-current ${info.color}`
+                              : 'bg-neutral-50 border-transparent hover:bg-neutral-100'
                           }
                         `}
                       >
                         <div className="flex items-center gap-1.5">
                           <span className="text-sm">{info.emoji}</span>
-                          <span className={`text-xs font-medium ${isSelected ? info.color : 'text-neutral-700'}`}>
+                          <span
+                            className={`text-xs font-medium ${isSelected ? info.color : 'text-neutral-700'}`}
+                          >
                             {info.label}
                           </span>
-                          <span className={`text-xs ml-auto ${isSelected ? info.color : 'text-neutral-400'}`}>
+                          <span
+                            className={`text-xs ml-auto ${isSelected ? info.color : 'text-neutral-400'}`}
+                          >
                             {count}
                           </span>
                         </div>
@@ -635,7 +681,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
               {distribution.map((range) => (
                 <button
                   key={range.label}
-                  onClick={() => setSelectedRange(selectedRange === range.label ? null : range.label)}
+                  onClick={() =>
+                    setSelectedRange(selectedRange === range.label ? null : range.label)
+                  }
                   className={`w-full text-left transition-all ${
                     selectedRange === range.label ? 'ring-2 ring-blue-500 rounded-lg' : ''
                   }`}
@@ -679,7 +727,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
 
           {/* 카테고리별 만족도 */}
           <div className="bg-white rounded-lg border border-neutral-200 p-5">
-            <h2 className="text-sm font-semibold text-neutral-800 mb-4">🏷️ 카테고리별 평균 만족도</h2>
+            <h2 className="text-sm font-semibold text-neutral-800 mb-4">
+              🏷️ 카테고리별 평균 만족도
+            </h2>
             <div className="space-y-2 max-h-80 overflow-y-auto">
               {categoryStats.map((cat, idx) => (
                 <div key={cat.category} className="flex items-center gap-3">
@@ -687,14 +737,23 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm text-neutral-700">{formatName(cat.category)}</span>
-                      <span className="text-sm font-medium text-neutral-900">{cat.avg.toFixed(1)}</span>
+                      <span className="text-sm font-medium text-neutral-900">
+                        {cat.avg.toFixed(1)}
+                      </span>
                     </div>
                     <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full"
                         style={{
                           width: `${cat.avg}%`,
-                          backgroundColor: cat.avg >= 80 ? '#10b981' : cat.avg >= 60 ? '#22c55e' : cat.avg >= 40 ? '#eab308' : '#ef4444',
+                          backgroundColor:
+                            cat.avg >= 80
+                              ? '#10b981'
+                              : cat.avg >= 60
+                                ? '#22c55e'
+                                : cat.avg >= 40
+                                  ? '#eab308'
+                                  : '#ef4444',
                         }}
                       />
                     </div>
@@ -708,7 +767,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
           {/* 높은 만족도 컨텐츠 특징 */}
           <div className="bg-white rounded-lg border border-neutral-200 p-5">
             <h2 className="text-sm font-semibold text-neutral-800 mb-1">🏆 높은 만족도 컨텐츠</h2>
-            <p className="text-xs text-neutral-500 mb-4">만족도 80점 이상 · {highSatisfactionContent.length}개</p>
+            <p className="text-xs text-neutral-500 mb-4">
+              만족도 80점 이상 · {highSatisfactionContent.length}개
+            </p>
 
             {highSatisfactionContent.length > 0 ? (
               <>
@@ -734,7 +795,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                     {reasonsAnalysis.high.slice(0, 5).map((item, idx) => (
                       <div key={idx} className="p-2 bg-neutral-50 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-medium text-emerald-600">{item.score}점</span>
+                          <span className="text-xs font-medium text-emerald-600">
+                            {item.score}점
+                          </span>
                           <span className="text-xs text-neutral-500">{item.topic}</span>
                         </div>
                         <p className="text-xs text-neutral-700">&ldquo;{item.reason}&rdquo;</p>
@@ -751,7 +814,9 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
           {/* 낮은 만족도 컨텐츠 특징 */}
           <div className="bg-white rounded-lg border border-neutral-200 p-5">
             <h2 className="text-sm font-semibold text-neutral-800 mb-1">📌 낮은 만족도 컨텐츠</h2>
-            <p className="text-xs text-neutral-500 mb-4">만족도 40점 이하 · {lowSatisfactionContent.length}개</p>
+            <p className="text-xs text-neutral-500 mb-4">
+              만족도 40점 이하 · {lowSatisfactionContent.length}개
+            </p>
 
             {lowSatisfactionContent.length > 0 ? (
               <>
@@ -805,7 +870,14 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
                 <p
                   className="text-2xl font-bold"
                   style={{
-                    color: domain.avg >= 80 ? '#10b981' : domain.avg >= 60 ? '#22c55e' : domain.avg >= 40 ? '#eab308' : '#ef4444',
+                    color:
+                      domain.avg >= 80
+                        ? '#10b981'
+                        : domain.avg >= 60
+                          ? '#22c55e'
+                          : domain.avg >= 40
+                            ? '#eab308'
+                            : '#ef4444',
                   }}
                 >
                   {domain.avg.toFixed(1)}
@@ -815,8 +887,12 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
             ))}
           </div>
         </div>
+
+        {/* 재활성(Re-active) 필요 토픽 리스트 */}
+        <div className="mt-6">
+          <ReviewList data={data} />
+        </div>
       </div>
     </div>
   );
 }
-

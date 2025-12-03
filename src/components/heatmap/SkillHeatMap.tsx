@@ -4,6 +4,13 @@ import { useMemo, useState, useRef, useEffect } from 'react';
 import type { DomainTreeData, CategoryTopicData, TopicDocInfo } from './matrixBuilder';
 import { HEIGHTS } from '@/define/heightDefines';
 import { formatDateWithDay } from '@/utils/dateUtils';
+import {
+  getTopicReviewLevel,
+  getHighestReviewLevel,
+  needsReview,
+  REVIEW_LEVEL_CONFIG,
+  type ReviewLevel,
+} from '@/utils/reviewUtils';
 
 interface SkillHeatMapProps {
   data: DomainTreeData[];
@@ -35,6 +42,22 @@ const STATUS_LABELS: Record<TopicStatus, string> = {
   FOCUSED: 'Focused',
   MASTERED: 'Mastered',
 };
+
+// 재활성(Re-active) 인디케이터 컴포넌트
+function ReviewIndicator({ level, size = 'sm' }: { level: ReviewLevel; size?: 'sm' | 'md' }) {
+  if (!needsReview(level)) return null;
+
+  const config = REVIEW_LEVEL_CONFIG[level];
+  const sizeClasses = size === 'sm' ? 'w-2 h-2' : 'w-2.5 h-2.5';
+
+  return (
+    <span
+      className={`absolute -top-0.5 -right-0.5 ${sizeClasses} rounded-full border border-white`}
+      style={{ backgroundColor: config.color }}
+      title={config.description}
+    />
+  );
+}
 
 // 상태별 조건 설명
 const STATUS_CONDITIONS: Record<TopicStatus, string> = {
@@ -394,6 +417,12 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
         <nav className="rounded-lg bg-white overflow-hidden space-y-2">
           {filteredData.map((domainData) => {
             const isExpanded = expandedDomains.has(domainData.domain);
+            // 도메인 내 모든 토픽의 재활성 레벨 계산
+            const domainReviewLevels = domainData.categories
+              .flatMap((cat) => cat.topics.filter((t) => t.docs.length > 0))
+              .map((t) => getTopicReviewLevel(t.docs.map((d) => d.date), t.docs.length));
+            const domainHighestReview = getHighestReviewLevel(domainReviewLevels);
+            const domainNeedsReview = needsReview(domainHighestReview);
 
             return (
               <div key={domainData.domain}>
@@ -402,8 +431,14 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                   onClick={() => toggleDomain(domainData.domain)}
                   className="w-full h-8 flex items-center justify-between px-4 hover:bg-neutral-50 hover:rounded-md transition-all cursor-pointer"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 relative">
                     <DomainIcon domain={domainData.domain} />
+                    {domainNeedsReview && (
+                      <span
+                        className="absolute -top-0.5 left-4 w-2.5 h-2.5 rounded-full border-2 border-white"
+                        style={{ backgroundColor: REVIEW_LEVEL_CONFIG[domainHighestReview].color }}
+                      />
+                    )}
                     <span className="text-sm font-medium text-neutral-900">
                       {formatDomainName(domainData.domain)}
                     </span>
@@ -434,6 +469,12 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                     {domainData.categories.map((cat) => {
                       const isSelected = selectedCategory === cat.category;
                       const progress = calculateCategoryProgress(cat);
+                      // 카테고리 내 토픽들의 재활성 레벨 계산
+                      const categoryReviewLevels = cat.topics
+                        .filter((t) => t.docs.length > 0)
+                        .map((t) => getTopicReviewLevel(t.docs.map((d) => d.date), t.docs.length));
+                      const categoryHighestReview = getHighestReviewLevel(categoryReviewLevels);
+                      const categoryNeedsReview = needsReview(categoryHighestReview);
 
                       return (
                         <button
@@ -455,8 +496,14 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                           `}
                         >
                           <div className="flex items-center justify-between w-full">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 relative">
                               <CategoryIcon category={cat.category} />
+                              {categoryNeedsReview && (
+                                <span
+                                  className="absolute -top-0.5 left-3.5 w-2 h-2 rounded-full border border-white"
+                                  style={{ backgroundColor: REVIEW_LEVEL_CONFIG[categoryHighestReview].color }}
+                                />
+                              )}
                               <span
                                 className={`text-sm ${
                                   isSelected ? 'font-medium text-blue-700' : 'text-neutral-700'
@@ -525,6 +572,32 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
               </div>
             </div>
 
+            {/* 재활성(Re-active) 레전드 */}
+            <div className="px-5 pb-3 flex items-center gap-3 text-xs text-neutral-500">
+              <span className="font-medium">Re-active:</span>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: REVIEW_LEVEL_CONFIG.LEVEL_1.color }}
+                />
+                <span>1개월</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: REVIEW_LEVEL_CONFIG.LEVEL_2.color }}
+                />
+                <span>3개월</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: REVIEW_LEVEL_CONFIG.LEVEL_3.color }}
+                />
+                <span>6개월</span>
+              </div>
+            </div>
+
             {/* 토픽 그리드 */}
             <div className="p-5" ref={gridRef}>
               <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-6 xl:grid-cols-8 gap-2">
@@ -534,6 +607,9 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                   const colors = STATUS_COLORS[status];
                   const isClickable = count > 0;
                   const isTopicSelected = selectedTopic?.name === topic.name;
+                  const reviewLevel = getTopicReviewLevel(topic.docs.map((d) => d.date), count);
+                  const hasReview = needsReview(reviewLevel);
+                  const reviewConfig = REVIEW_LEVEL_CONFIG[reviewLevel];
 
                   return (
                     <div key={topic.name} className="group relative floating-panel-trigger">
@@ -549,6 +625,7 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                         style={{
                           backgroundColor: colors.bg,
                           color: colors.text,
+                          boxShadow: hasReview ? `inset 0 0 0 3px ${reviewConfig.color}` : undefined,
                         }}
                       >
                         <span className="text-[10px] font-semibold leading-tight">
@@ -558,6 +635,8 @@ export default function SkillHeatMap({ data }: SkillHeatMapProps) {
                           <span className="text-[8px] opacity-70 mt-0.5">{count}</span>
                         )}
                       </button>
+                      {/* 재활성 인디케이터 */}
+                      <ReviewIndicator level={reviewLevel} />
 
                       {/* 툴팁 */}
                       <div
