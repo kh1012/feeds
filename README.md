@@ -54,8 +54,24 @@ GitHub TIL README.md → fetchTilContents() → loadAllDocsWithUrl() → useGetF
 
 카테고리별 토픽 학습 현황을 GitHub Contribution 스타일로 시각화합니다.
 
-**주요 컴포넌트**:
-- `SkillHeatMap.tsx`: 히트맵 메인 컴포넌트
+**컴포넌트 아키텍처**:
+
+히트맵은 모듈화된 컴포넌트 구조로 설계되어 있습니다:
+
+```
+SkillHeatMap.tsx (메인 컴포넌트, ~130줄)
+├── HeatmapSidebar.tsx      # 도메인/카테고리 트리 네비게이션
+├── TopicViews.tsx          # TopicGridView, TopicListView
+├── StatusLegend.tsx        # 상태 레전드, Re-active 레전드
+├── TopicCards.tsx          # 플로팅 패널, 모바일 문서 패널
+├── ViewModeToggle.tsx      # 그리드/리스트 토글 + 정렬 필터
+├── HeatmapIcons.tsx        # CategoryIcon, DomainIcon
+└── heatmapConstants.ts     # 상수, 타입, 유틸 함수
+```
+
+**뷰 모드**:
+- **그리드 뷰**: GitHub Contribution 스타일의 격자 형태
+- **리스트 뷰**: 아코디언 형태로 토픽별 문서 목록 확장
 
 **학습 상태 (Topic Status)**:
 
@@ -90,6 +106,19 @@ GitHub TIL README.md → fetchTilContents() → loadAllDocsWithUrl() → useGetF
 // src/define/reActiveConditionDefines.ts
 export const RE_ACTIVE_ENABLED_DOMAINS: string[] = ['frontend'];
 ```
+
+**히트맵 컴포넌트 파일별 역할**:
+
+| 파일 | 줄 수 | 역할 |
+|------|------|------|
+| SkillHeatMap.tsx | ~130 | 메인 컴포넌트 (상태 관리, 레이아웃) |
+| HeatmapSidebar.tsx | ~130 | 도메인/카테고리 트리 네비게이션 |
+| TopicViews.tsx | ~190 | 그리드 뷰 + 리스트 뷰 (아코디언) |
+| StatusLegend.tsx | ~110 | 상태 레전드, 개수 표시, Re-active 레전드 |
+| TopicCards.tsx | ~130 | 플로팅 패널, 모바일 문서 패널, 문서 링크 |
+| ViewModeToggle.tsx | ~50 | 그리드/리스트 토글 버튼 + 정렬 필터 |
+| HeatmapIcons.tsx | ~60 | 카테고리/도메인 아이콘 컴포넌트 |
+| heatmapConstants.ts | ~80 | 상수, 타입, 포맷 유틸 함수 |
 
 ---
 
@@ -213,11 +242,18 @@ src/
 │   │   ├── MobileFilter.tsx
 │   │   └── DesktopFilterPanel.tsx
 │   ├── heatmap/              # 히트맵 관련
-│   │   ├── SkillHeatMap.tsx
-│   │   ├── matrixBuilder.ts
-│   │   ├── domainHeatmap.ts
-│   │   ├── heatmapTypes.ts
-│   │   └── skillSchema.ts
+│   │   ├── SkillHeatMap.tsx      # 메인 컴포넌트 (상태 관리, 레이아웃)
+│   │   ├── HeatmapSidebar.tsx    # 도메인/카테고리 트리 네비게이션
+│   │   ├── TopicViews.tsx        # TopicGridView, TopicListView
+│   │   ├── StatusLegend.tsx      # 상태 레전드, Re-active 레전드
+│   │   ├── TopicCards.tsx        # 플로팅 패널, 모바일 문서 패널
+│   │   ├── ViewModeToggle.tsx    # 그리드/리스트 토글 + 정렬 필터
+│   │   ├── HeatmapIcons.tsx      # CategoryIcon, DomainIcon
+│   │   ├── heatmapConstants.ts   # 상수, 타입, 유틸 함수
+│   │   ├── matrixBuilder.ts      # 히트맵 데이터 빌더
+│   │   ├── domainHeatmap.ts      # 도메인 기반 히트맵 데이터
+│   │   ├── heatmapTypes.ts       # 타입 정의
+│   │   └── skillSchema.ts        # 스킬 스키마 정의
 │   └── analysis/             # 분석 관련
 │       ├── AnalysisDashboard.tsx
 │       └── ReviewList.tsx
