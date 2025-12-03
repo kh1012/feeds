@@ -14,18 +14,11 @@ import { formatDateWithDay } from '@/utils/dateUtils';
 import Button from '@/components/common/Button';
 import { DocMeta } from '@/define/metaDefines';
 import Tag from '@/components/common/Tag';
+import { formatName } from '@/utils/formatUtils';
 
 interface FeedCardProps {
   content: TilContentType;
   meta?: DocMeta & { rawUrl: string; url: string; title: string; date: string };
-}
-
-// 카테고리명 포맷팅
-function formatName(name: string): string {
-  return name
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
 }
 
 export const FeedCard = ({ content, meta: initialMeta }: FeedCardProps) => {
