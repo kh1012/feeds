@@ -6,6 +6,7 @@ import { Spinner } from '@/components/common/Spinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { HEIGHTS } from '@/define/heightDefines';
 import { useGetFeedContents, extractFilters, filterDocs } from '@/hooks/useGetFeedContents';
+import { useVisitorCount } from '@/hooks/useVisitorCount';
 
 // 카테고리명 포맷팅
 function formatName(name: string): string {
@@ -15,8 +16,20 @@ function formatName(name: string): string {
     .join(' ');
 }
 
+// 작은 인라인 스피너
+function MiniSpinner() {
+  return (
+    <span
+      className="inline-block w-3 h-3 border-2 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"
+      role="status"
+      aria-label="로딩 중"
+    />
+  );
+}
+
 export default function HomeViewContent() {
   const { data: contents, isPending, isError } = useGetFeedContents();
+  const { count: visitorCount, isLoading: isVisitorLoading } = useVisitorCount();
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [mobileFilterExpanded, setMobileFilterExpanded] = useState(false);
@@ -91,6 +104,21 @@ export default function HomeViewContent() {
     <div style={{ marginTop: HEIGHTS.GNB_HEIGHT }}>
       {/* 모바일: 상단 필터 (접히는 형태) */}
       <div className="lg:hidden bg-white border-b border-neutral-200">
+        {/* Visited 태그 */}
+        <div className="px-4 pt-3 pb-1">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-50 text-emerald-600">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                fillRule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Visited {isVisitorLoading ? <MiniSpinner /> : visitorCount?.toLocaleString()}
+          </span>
+        </div>
+
         {/* 기록 카운트 + 토글 버튼 */}
         <div
           role="button"
@@ -228,6 +256,21 @@ export default function HomeViewContent() {
             <aside className="hidden lg:block w-56 shrink-0">
               <div className="sticky top-16">
                 <div className="bg-white rounded-lg border border-neutral-200 p-4">
+                  {/* Visited 태그 */}
+                  <div className="mb-3 pb-3 border-b border-neutral-200">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-50 text-emerald-600">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Visited {isVisitorLoading ? <MiniSpinner /> : visitorCount?.toLocaleString()}
+                    </span>
+                  </div>
+
                   <h2 className="text-sm font-semibold text-neutral-800 mb-3">필터</h2>
 
                   {/* Domain 필터 */}
