@@ -3,6 +3,7 @@ import { fetchTilContentMarkdown, fetchTilContents } from '@/utils/tilUtils';
 import { baseCategories, baseTopics } from './skillSchema';
 import { DocMeta } from '@/define/metaDefines';
 import { TilContentType } from '@/define/tilDefines';
+import { extractSummary } from '@/utils/mdParseUtils';
 
 // URL이 포함된 문서 메타 타입
 export type DocMetaWithUrl = DocMeta & {
@@ -10,6 +11,7 @@ export type DocMetaWithUrl = DocMeta & {
   url: string;
   title: string;
   date: string;
+  summary: string;
 };
 
 // 모든 TIL md에서 frontmatter 읽어오기 (비동기)
@@ -40,7 +42,7 @@ export async function loadAllDocsWithUrl(): Promise<DocMetaWithUrl[]> {
     if (!result) continue;
 
     try {
-      const { data } = matter(result.markdown);
+      const { data, content } = matter(result.markdown);
 
       // 필수 필드 검증
       if (!data?.type || !data?.category || !data?.topic) continue;
@@ -73,6 +75,7 @@ export async function loadAllDocsWithUrl(): Promise<DocMetaWithUrl[]> {
         url: result.til.url,
         title: result.til.title,
         date: result.til.date,
+        summary: extractSummary(content),
       });
     } catch {
       console.warn(`Failed to parse frontmatter: ${result.til.rawUrl}`);

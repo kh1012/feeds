@@ -10,8 +10,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'kh1012 - TIL',
-  description: 'Feeds',
+  title: {
+    default: 'kh1012 - TIL',
+    template: '%s | kh1012 TIL',
+  },
+  description: '프론트엔드 개발자의 TIL(Today I Learned) - React, TypeScript, Next.js 학습 기록',
+  keywords: ['TIL', 'Today I Learned', 'Frontend', 'React', 'TypeScript', 'Next.js'],
+  authors: [{ name: 'kh1012', url: 'https://github.com/kh1012' }],
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +37,6 @@ export default function RootLayout({
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
-        <title>kh1012 - TIL</title>
       </head>
       <body className={`${geistMono.variable} antialiased`}>
         <QueryProvider>
