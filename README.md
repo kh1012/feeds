@@ -79,6 +79,17 @@ GitHub TIL README.md → fetchTilContents() → loadAllDocsWithUrl() → useGetF
 
 **예외 조건**:
 - MASTERED 상태(count ≥ 5)인 토픽은 재활성 표시 제외
+- 특정 도메인만 재활성 적용 (설정 파일에서 관리)
+
+**재활성 적용 도메인**:
+- `src/define/reActiveConditionDefines.ts` 에서 관리
+- 현재 적용 도메인: `frontend`
+- 비적용 도메인: `scrum`, `meta` 등 (복습 필요 없는 영역)
+
+```typescript
+// src/define/reActiveConditionDefines.ts
+export const RE_ACTIVE_ENABLED_DOMAINS: string[] = ['frontend'];
+```
 
 ---
 
@@ -224,6 +235,7 @@ src/
 └── define/                   # 상수 정의
     ├── heightDefines.ts
     ├── metaDefines.ts
+    ├── reActiveConditionDefines.ts  # 재활성 적용 도메인 설정
     ├── tilDefines.ts
     └── urlDefines.ts
 ```

@@ -26,7 +26,7 @@ export default function HeatmapPage() {
   }
 
   return (
-    <div className="p-4 sm:p-8 mx-auto" style={{ maxWidth: 1248 }}>
+    <div className="py-4 px-4 sm:p-8 mx-auto" style={{ maxWidth: 1248 }}>
       <SkillHeatmap data={data} />
     </div>
   );

@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="지침용 RULE.md 축가">
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/home/HomeViewContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/heatmap/SkillHeatMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/heatmap/SkillHeatMap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/reviewUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/reviewUtils.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +103,7 @@
       <workItem from="1764495301990" duration="1360000" />
       <workItem from="1764590631439" duration="758000" />
       <workItem from="1764661419243" duration="193000" />
-      <workItem from="1764723797505" duration="633000" />
+      <workItem from="1764723797505" duration="1837000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />

@@ -1,3 +1,5 @@
+import { isReActiveEnabledDomain } from '@/define/reActiveConditionDefines';
+
 /**
  * 재활성(Re-active) 레벨 정의
  * - NONE: 재활성 불필요 (최근 1개월 이내)
@@ -85,10 +87,17 @@ export const MASTERED_THRESHOLD = 5;
 
 /**
  * 토픽별 가장 최근 날짜에서 재활성 레벨 계산
+ * - 재활성 미적용 도메인이면 NONE 반환
  * - Mastered 상태(count >= 5)면 재활성 불필요
+ * @param dates - 학습 날짜 배열
+ * @param count - 학습 횟수 (선택)
+ * @param domain - 도메인명 (선택, 미입력 시 도메인 체크 생략)
  */
-export function getTopicReviewLevel(dates: string[], count?: number): ReviewLevel {
+export function getTopicReviewLevel(dates: string[], count?: number, domain?: string): ReviewLevel {
   if (dates.length === 0) return 'NONE';
+
+  // 도메인이 제공되면 재활성 적용 도메인인지 확인
+  if (domain && !isReActiveEnabledDomain(domain)) return 'NONE';
 
   // Mastered 상태면 재활성 불필요
   const topicCount = count ?? dates.length;
@@ -185,6 +194,9 @@ export function calculateReviewItems<
   const reviewItems: ReviewItem[] = [];
 
   for (const [, value] of topicMap) {
+    // 재활성 미적용 도메인이면 스킵
+    if (!isReActiveEnabledDomain(value.domain)) continue;
+
     const sortedDates = [...value.dates].sort((a, b) => (a < b ? 1 : -1));
     const lastDate = sortedDates[0];
     const count = value.dates.length;
