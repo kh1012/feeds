@@ -38,8 +38,8 @@ function ReviewStatCard({
       style={{
         borderColor: isSelected ? config.color : '#e5e7eb',
         backgroundColor: isSelected ? config.bgColor : 'white',
-        ringColor: config.color,
-      }}
+        '--tw-ring-color': config.color,
+      } as React.CSSProperties}
     >
       <div className="flex items-center gap-2 mb-1">
         <span
