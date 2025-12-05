@@ -8,9 +8,11 @@ GitHub TIL 저장소의 마크다운 파일들을 파싱하여 피드 형태로 
 
 ### 주요 기능
 
-- **피드 뷰**: SNS 스타일의 학습 기록 피드
+- **피드 뷰**: SNS 스타일의 학습 기록 피드 (무한 스크롤)
+- **GitHub 잔디**: 1년간의 GitHub Contribution 그래프
+- **피드 상세 페이지**: 개별 글 전체보기 + 목차 네비게이션
 - **히트맵**: 카테고리/토픽별 학습 현황 시각화
-- **분석 대시보드**: 만족도 기반 학습 분석
+- **분석 대시보드**: 만족도 기반 학습 분석 + 업로드 추이
 - **재활성 시스템**: 복습이 필요한 토픽 알림
 
 ---
@@ -19,11 +21,11 @@ GitHub TIL 저장소의 마크다운 파일들을 파싱하여 피드 형태로 
 
 | 영역 | 기술 |
 |------|------|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 16 (App Router) |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
 | State Management | TanStack Query (React Query) |
-| Data Source | GitHub Raw Content API |
+| Data Source | GitHub Raw Content API, GitHub GraphQL API |
 | Analytics | Upstash Redis (방문자 수) |
 
 ---
@@ -32,21 +34,48 @@ GitHub TIL 저장소의 마크다운 파일들을 파싱하여 피드 형태로 
 
 ### `/` - Feeds (홈)
 
-피드 카드 형태로 학습 기록을 표시합니다.
+피드 카드 형태로 학습 기록을 표시합니다. 상단에 GitHub Contribution 그래프가 표시됩니다.
 
 **주요 컴포넌트**:
-- `HomeViewContent.tsx`: 피드 목록 및 필터링
+- `ContributionGraph.tsx`: GitHub 잔디 그래프 (1년치)
+- `HomeViewContent.tsx`: 피드 목록 및 필터링 (무한 스크롤)
 - `FeedCard.tsx`: 개별 피드 카드
 - `MobileFilter.tsx` / `DesktopFilterPanel.tsx`: 도메인/카테고리 필터
 
 **데이터 흐름**:
 ```
 GitHub TIL README.md → fetchTilContents() → loadAllDocsWithUrl() → useGetFeedContents()
+GitHub GraphQL API → /api/github/contributions → useGetGithubContributions()
 ```
 
 **필터링 조건**:
 - Domain: frontend, backend, devops 등
 - Category: javascript, react, typescript 등
+
+**무한 스크롤**:
+- 초기 로드: 10개
+- 스크롤 하단 도달 시: 10개씩 추가 로드
+- `IntersectionObserver` 기반 구현
+
+---
+
+### `/feeds/[slug]` - 피드 상세 페이지
+
+개별 학습 기록의 전체 내용을 표시합니다.
+
+**주요 컴포넌트**:
+- `FeedDetailContent.tsx`: 본문 렌더링 (ReactMarkdown)
+- `FeedNavigation.tsx`: 좌측 목차 네비게이션 (월별 그룹화)
+
+**기능**:
+- 마크다운 렌더링 (코드 하이라이팅 포함)
+- 이전/다음 글 네비게이션 (날짜순)
+- 월별 그룹화된 목차 (자동 확장)
+- 모바일 반응형 (전체 폭 사용)
+
+**라우팅**:
+- `generateStaticParams`로 빌드 시 정적 생성
+- URL: `/feeds/{파일명}` (`.md` 제외)
 
 ---
 
@@ -107,19 +136,6 @@ SkillHeatMap.tsx (메인 컴포넌트, ~130줄)
 export const RE_ACTIVE_ENABLED_DOMAINS: string[] = ['frontend'];
 ```
 
-**히트맵 컴포넌트 파일별 역할**:
-
-| 파일 | 줄 수 | 역할 |
-|------|------|------|
-| SkillHeatMap.tsx | ~130 | 메인 컴포넌트 (상태 관리, 레이아웃) |
-| HeatmapSidebar.tsx | ~130 | 도메인/카테고리 트리 네비게이션 |
-| TopicViews.tsx | ~190 | 그리드 뷰 + 리스트 뷰 (아코디언) |
-| StatusLegend.tsx | ~110 | 상태 레전드, 개수 표시, Re-active 레전드 |
-| TopicCards.tsx | ~130 | 플로팅 패널, 모바일 문서 패널, 문서 링크 |
-| ViewModeToggle.tsx | ~50 | 그리드/리스트 토글 버튼 + 정렬 필터 |
-| HeatmapIcons.tsx | ~60 | 카테고리/도메인 아이콘 컴포넌트 |
-| heatmapConstants.ts | ~80 | 상수, 타입, 포맷 유틸 함수 |
-
 ---
 
 ### `/analysis` - 분석 대시보드
@@ -128,15 +144,22 @@ export const RE_ACTIVE_ENABLED_DOMAINS: string[] = ['frontend'];
 
 **주요 컴포넌트**:
 - `AnalysisDashboard.tsx`: 분석 대시보드 메인
+- `UploadTrendChart.tsx`: 업로드 추이 꺾은선 그래프
 - `ReviewList.tsx`: 재활성 필요 토픽 리스트
 
 **분석 항목**:
 1. **전체 통계**: 평균/중앙값/최고/최저 만족도
 2. **사분면 차트**: 학습 빈도 × 만족도 매트릭스
-3. **만족도 분포**: 점수 구간별 분포
-4. **카테고리별 만족도**: 카테고리별 평균
-5. **키워드 분석**: 고/저 만족도 컨텐츠의 공통 키워드
-6. **재활성 리스트**: 복습이 필요한 토픽 목록
+3. **업로드 추이**: 주별/월별/연별 업로드 횟수 그래프
+4. **만족도 분포**: 점수 구간별 분포
+5. **카테고리별 만족도**: 카테고리별 평균
+6. **키워드 분석**: 고/저 만족도 컨텐츠의 공통 키워드
+7. **재활성 리스트**: 복습이 필요한 토픽 목록
+
+**업로드 추이 차트**:
+- 주별/월별/연별 토글 지원
+- 꺾은선 + 그라데이션 영역
+- 평균 업로드 수 표시
 
 **사분면 분류**:
 
@@ -179,15 +202,29 @@ type ContentItem = {
 }
 ```
 
+### `GET /api/github/contributions`
+
+GitHub Contribution 데이터를 GraphQL API로 조회합니다.
+
+**응답 형식**:
+```typescript
+{
+  totalContributions: number;
+  weeks: Array<{
+    days: Array<{
+      date: string;      // YYYY-MM-DD
+      count: number;     // 기여 횟수
+      level: number;     // 0-4 (레벨)
+    }>;
+  }>;
+}
+```
+
+**캐싱**: 1시간 (revalidate: 3600)
+
 ### `GET/POST /api/visitors`
 
 방문자 수 조회/증가 API (Upstash Redis 사용).
-
-**환경 변수 필요**:
-```env
-UPSTASH_REDIS_REST_URL=your_url
-UPSTASH_REDIS_REST_TOKEN=your_token
-```
 
 ---
 
@@ -222,56 +259,72 @@ satisfaction:                  # 만족도 (선택)
 src/
 ├── app/
 │   ├── page.tsx              # 홈 (Feeds)
+│   ├── feeds/[slug]/page.tsx # 피드 상세
 │   ├── heatmap/page.tsx      # 히트맵
 │   ├── analysis/page.tsx     # 분석
 │   ├── api/
-│   │   ├── contents/route.ts # 콘텐츠 API
-│   │   └── visitors/route.ts # 방문자 API
+│   │   ├── contents/route.ts          # 콘텐츠 API
+│   │   ├── github/contributions/route.ts  # GitHub API
+│   │   └── visitors/route.ts          # 방문자 API
 │   └── layout.tsx            # 레이아웃
 ├── components/
 │   ├── common/               # 공통 컴포넌트
 │   │   ├── Button.tsx
 │   │   ├── FilterSelect.tsx
+│   │   ├── GNB.tsx
 │   │   ├── MiniSpinner.tsx
+│   │   ├── PortalOverlay.tsx
 │   │   ├── Spinner.tsx
 │   │   ├── Tag.tsx
 │   │   └── VisitedBadge.tsx
 │   ├── home/                 # 홈 관련
 │   │   ├── HomeViewContent.tsx
+│   │   ├── ContributionGraph.tsx  # GitHub 잔디
 │   │   ├── FeedCard.tsx
 │   │   ├── MobileFilter.tsx
 │   │   └── DesktopFilterPanel.tsx
+│   ├── feeds/                # 피드 상세 관련
+│   │   ├── FeedDetailContent.tsx
+│   │   └── FeedNavigation.tsx
 │   ├── heatmap/              # 히트맵 관련
-│   │   ├── SkillHeatMap.tsx      # 메인 컴포넌트 (상태 관리, 레이아웃)
-│   │   ├── HeatmapSidebar.tsx    # 도메인/카테고리 트리 네비게이션
-│   │   ├── TopicViews.tsx        # TopicGridView, TopicListView
-│   │   ├── StatusLegend.tsx      # 상태 레전드, Re-active 레전드
-│   │   ├── TopicCards.tsx        # 플로팅 패널, 모바일 문서 패널
-│   │   ├── ViewModeToggle.tsx    # 그리드/리스트 토글 + 정렬 필터
-│   │   ├── HeatmapIcons.tsx      # CategoryIcon, DomainIcon
-│   │   ├── heatmapConstants.ts   # 상수, 타입, 유틸 함수
-│   │   ├── matrixBuilder.ts      # 히트맵 데이터 빌더
-│   │   ├── domainHeatmap.ts      # 도메인 기반 히트맵 데이터
-│   │   ├── heatmapTypes.ts       # 타입 정의
-│   │   └── skillSchema.ts        # 스킬 스키마 정의
+│   │   ├── SkillHeatMap.tsx
+│   │   ├── HeatmapSidebar.tsx
+│   │   ├── TopicViews.tsx
+│   │   ├── StatusLegend.tsx
+│   │   ├── TopicCards.tsx
+│   │   ├── ViewModeToggle.tsx
+│   │   ├── HeatmapIcons.tsx
+│   │   ├── heatmapConstants.ts
+│   │   ├── matrixBuilder.ts
+│   │   ├── domainHeatmap.ts
+│   │   ├── heatmapTypes.ts
+│   │   └── skillSchema.ts
 │   └── analysis/             # 분석 관련
 │       ├── AnalysisDashboard.tsx
+│       ├── UploadTrendChart.tsx   # 업로드 추이 차트
 │       └── ReviewList.tsx
 ├── hooks/                    # 커스텀 훅
 │   ├── useGetFeedContents.ts
+│   ├── useGetGithubContributions.ts  # GitHub 잔디 데이터
 │   ├── useGetHeatmapData.ts
 │   ├── useGetContents.ts
+│   ├── useGetTilContents.ts
 │   └── useVisitorCount.ts
 ├── utils/                    # 유틸리티
-│   ├── dateUtils.ts
+│   ├── chartUtils.ts         # 차트 유틸 (SVG path 등)
+│   ├── dateUtils.ts          # 날짜 유틸
+│   ├── feedUtils.ts          # 피드 유틸 (slug 변환)
 │   ├── formatUtils.ts
 │   ├── mdParseUtils.ts
 │   ├── reviewUtils.ts
 │   └── tilUtils.ts
+├── types/                    # 타입 정의
+│   └── github.ts             # GitHub API 타입
 └── define/                   # 상수 정의
+    ├── chartDefines.ts       # 차트 상수 (색상, 크기)
     ├── heightDefines.ts
     ├── metaDefines.ts
-    ├── reActiveConditionDefines.ts  # 재활성 적용 도메인 설정
+    ├── reActiveConditionDefines.ts
     ├── tilDefines.ts
     └── urlDefines.ts
 ```
@@ -300,20 +353,33 @@ http://localhost:3000 에서 확인
 yarn build
 ```
 
-### 환경 변수 설정 (선택)
+### 환경 변수 설정
 
-방문자 수 기능을 사용하려면 `.env.local` 파일 생성:
+`.env.local` 파일 생성:
 
 ```env
+# GitHub Contribution 그래프 (필수)
+GITHUB_TOKEN=ghp_your_personal_access_token
+GITHUB_USERNAME=your_github_username
+
+# 방문자 수 기능 (선택)
 UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
 UPSTASH_REDIS_REST_TOKEN=your_token
 ```
+
+**GitHub Token 권한**:
+- `read:user` - 기본 프로필 읽기
+- 공개 저장소의 contribution 데이터는 추가 권한 불필요
 
 ---
 
 ## 배포
 
 Vercel 배포 시 환경 변수를 Settings → Environment Variables에서 설정하세요.
+
+필수 환경 변수:
+- `GITHUB_TOKEN`
+- `GITHUB_USERNAME`
 
 ---
 
