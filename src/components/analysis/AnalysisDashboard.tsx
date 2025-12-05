@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { DocMetaWithUrl } from '@/components/heatmap/matrixBuilder';
 import ReviewList from './ReviewList';
+import { UploadTrendChart } from './UploadTrendChart';
 
 interface AnalysisDashboardProps {
   data: DocMetaWithUrl[];
@@ -430,6 +431,11 @@ export default function AnalysisDashboard({ data }: AnalysisDashboardProps) {
             <p className="text-xs text-neutral-500 mb-1">분석 대상</p>
             <p className="text-2xl font-bold text-neutral-900">{stats?.total}개</p>
           </div>
+        </div>
+
+        {/* 업로드 추이 그래프 */}
+        <div className="mb-6">
+          <UploadTrendChart data={data} />
         </div>
 
         {/* 사분면 차트 (이전 SatisfactionDashboard) */}

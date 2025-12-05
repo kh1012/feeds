@@ -1,21 +1,26 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { FeedCard } from '@/components/home/FeedCard';
 import { MobileFilter } from '@/components/home/MobileFilter';
 import { DesktopFilterPanel } from '@/components/home/DesktopFilterPanel';
 import { ContributionGraph } from '@/components/home/ContributionGraph';
 import { Spinner } from '@/components/common/Spinner';
+import { MiniSpinner } from '@/components/common/MiniSpinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { HEIGHTS } from '@/define/heightDefines';
 import { useGetFeedContents, extractFilters, filterDocs } from '@/hooks/useGetFeedContents';
 import { useVisitorCount } from '@/hooks/useVisitorCount';
+
+const ITEMS_PER_PAGE = 10;
 
 export default function HomeViewContent() {
   const { data: contents, isPending, isError } = useGetFeedContents();
   const { count: visitorCount, isLoading: isVisitorLoading } = useVisitorCount();
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // 필터 옵션 추출
   const filterOptions = useMemo(() => {
@@ -45,6 +50,49 @@ export default function HomeViewContent() {
       category: selectedCategory,
     });
   }, [contents, selectedDomain, selectedCategory]);
+
+  // 필터 변경 시 displayCount 리셋
+  useEffect(() => {
+    setDisplayCount(ITEMS_PER_PAGE);
+  }, [selectedDomain, selectedCategory]);
+
+  // 현재 표시할 콘텐츠
+  const displayedContents = useMemo(() => {
+    return filteredContents.slice(0, displayCount);
+  }, [filteredContents, displayCount]);
+
+  // 더 불러올 수 있는지 여부
+  const hasMore = displayCount < filteredContents.length;
+
+  // 더 불러오기 함수
+  const loadMore = useCallback(() => {
+    if (hasMore) {
+      setDisplayCount((prev) => Math.min(prev + ITEMS_PER_PAGE, filteredContents.length));
+    }
+  }, [hasMore, filteredContents.length]);
+
+  // IntersectionObserver로 무한 스크롤 구현
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadMore]);
 
   // 도메인 선택 핸들러
   const handleDomainChange = (domain: string | null) => {
@@ -117,8 +165,8 @@ export default function HomeViewContent() {
                 <ContributionGraph />
               </div>
 
-              <div className="flex flex-col gap-2 lg:gap-4">
-                {filteredContents.map((content) => (
+              <div className="flex flex-col gap-4 px-4 lg:px-0">
+                {displayedContents.map((content) => (
                   <FeedCard
                     key={content.rawUrl}
                     content={{
@@ -131,6 +179,23 @@ export default function HomeViewContent() {
                     meta={content}
                   />
                 ))}
+
+                {/* 로딩 트리거 및 표시 */}
+                {hasMore && (
+                  <div
+                    ref={loadMoreRef}
+                    className="flex justify-center items-center py-8"
+                  >
+                    <MiniSpinner />
+                  </div>
+                )}
+
+                {/* 모두 로드됨 표시 */}
+                {!hasMore && displayedContents.length > 0 && (
+                  <div className="text-center py-8 text-sm text-neutral-400">
+                    모든 피드를 불러왔습니다
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 interface ButtonProps {
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent) => void;
   transparent?: boolean;
 }
 
