@@ -11,7 +11,7 @@ import { FeedNavigation } from './FeedNavigation';
 import { getSlugFromUrl } from '@/utils/feedUtils';
 import { fetchTilContentMarkdown } from '@/utils/tilUtils';
 import { parseMarkdownWithMeta } from '@/utils/mdParseUtils';
-import { formatDateWithDay } from '@/utils/dateUtils';
+import { formatDateWithDay, sortByDateDesc } from '@/utils/dateUtils';
 import { formatName } from '@/utils/formatUtils';
 import { FEEDS_URLS } from '@/define/urlDefines';
 import { HEIGHTS } from '@/define/heightDefines';
@@ -23,6 +23,18 @@ type FeedDetailContentProps = {
   docs: DocMetaWithUrl[];
   slug: string;
 };
+
+/** 이전/다음 문서 정보 계산 */
+function getAdjacentDocs(docs: DocMetaWithUrl[], currentSlug: string) {
+  const sortedDocs = sortByDateDesc(docs);
+  const currentIndex = sortedDocs.findIndex((d) => getSlugFromUrl(d.rawUrl) === currentSlug);
+
+  return {
+    sortedDocs,
+    prevDoc: currentIndex > 0 ? sortedDocs[currentIndex - 1] : null,
+    nextDoc: currentIndex < sortedDocs.length - 1 ? sortedDocs[currentIndex + 1] : null,
+  };
+}
 
 export function FeedDetailContent({ doc, docs, slug }: FeedDetailContentProps) {
   const [markdownContent, setMarkdownContent] = useState<string>('');
@@ -44,15 +56,10 @@ export function FeedDetailContent({ doc, docs, slug }: FeedDetailContentProps) {
     loadContent();
   }, [doc.rawUrl]);
 
-  // 날짜순(최근순) 정렬된 문서 목록
-  const sortedDocs = useMemo(() => {
-    return [...docs].sort((a, b) => b.date.localeCompare(a.date));
-  }, [docs]);
-
-  // 이전/다음 문서 찾기 (날짜순 기준)
-  const currentIndex = sortedDocs.findIndex((d) => getSlugFromUrl(d.rawUrl) === slug);
-  const prevDoc = currentIndex > 0 ? sortedDocs[currentIndex - 1] : null;
-  const nextDoc = currentIndex < sortedDocs.length - 1 ? sortedDocs[currentIndex + 1] : null;
+  const { sortedDocs, prevDoc, nextDoc } = useMemo(
+    () => getAdjacentDocs(docs, slug),
+    [docs, slug]
+  );
 
   return (
     <div style={{ paddingTop: HEIGHTS.GNB_HEIGHT }}>
@@ -102,7 +109,9 @@ export function FeedDetailContent({ doc, docs, slug }: FeedDetailContentProps) {
                   </div>
 
                   {/* 제목 */}
-                  <h1 className="text-xl lg:text-2xl font-bold text-neutral-900 mb-3">{doc.topic}</h1>
+                  <h1 className="text-xl lg:text-2xl font-bold text-neutral-900 mb-3">
+                    {doc.topic}
+                  </h1>
 
                   {/* 메타 정보 */}
                   <div className="flex flex-wrap items-center gap-2 mb-4">

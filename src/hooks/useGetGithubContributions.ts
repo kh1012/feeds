@@ -1,19 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
+import type { ContributionsData } from '@/types/github';
 
-export type ContributionDay = {
-  date: string;
-  count: number;
-  level: number;
-};
-
-export type ContributionWeek = {
-  days: ContributionDay[];
-};
-
-export type ContributionsData = {
-  totalContributions: number;
-  weeks: ContributionWeek[];
-};
+// 타입 재export (하위 호환성)
+export type { ContributionDay, ContributionWeek, ContributionsData } from '@/types/github';
 
 async function fetchContributions(): Promise<ContributionsData> {
   const res = await fetch('/api/github/contributions');
@@ -34,4 +23,3 @@ export function useGetGithubContributions() {
     retry: 2,
   });
 }
-

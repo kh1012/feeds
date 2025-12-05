@@ -1,47 +1,19 @@
 'use client';
 
 import { useMemo } from 'react';
-import {
-  useGetGithubContributions,
-  ContributionDay,
-  ContributionWeek,
-} from '@/hooks/useGetGithubContributions';
+import { useGetGithubContributions } from '@/hooks/useGetGithubContributions';
 import { Spinner } from '@/components/common/Spinner';
+import { ContributionDay } from '@/types/github';
+import {
+  CONTRIBUTION_COLORS,
+  DAY_LABELS,
+  CONTRIBUTION_CELL,
+  CONTRIBUTION_CELL_MOBILE,
+} from '@/define/chartDefines';
+import { calculateMonthLabels } from '@/utils/chartUtils';
+import { formatDateKorean } from '@/utils/dateUtils';
 
-// GitHub 잔디 색상
-const LEVEL_COLORS = [
-  '#ebedf0', // Level 0: 기여 없음
-  '#9be9a8', // Level 1
-  '#40c463', // Level 2
-  '#30a14e', // Level 3
-  '#216e39', // Level 4
-] as const;
-
-const MONTH_LABELS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-const DAY_LABELS = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
-
-// 셀 크기 상수 (데스크탑)
-const CELL_SIZE = 10;
-const CELL_GAP = 3;
-const CELL_TOTAL = CELL_SIZE + CELL_GAP;
-
-// 셀 크기 상수 (모바일) - 데스크탑 대비 약 30% 축소
-const MOBILE_CELL_SIZE = 4;
-const MOBILE_CELL_GAP = 1.5;
-const MOBILE_CELL_TOTAL = MOBILE_CELL_SIZE + MOBILE_CELL_GAP;
+// ============ 하위 컴포넌트 ============
 
 type ContributionCellProps = {
   day: ContributionDay;
@@ -50,14 +22,9 @@ type ContributionCellProps = {
   size?: number;
 };
 
-function ContributionCell({ day, x, y, size = CELL_SIZE }: ContributionCellProps) {
-  const color = LEVEL_COLORS[day.level];
-  const formattedDate = new Date(day.date).toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  // radius를 셀 크기의 20% 비율로 계산
+function ContributionCell({ day, x, y, size = CONTRIBUTION_CELL.SIZE }: ContributionCellProps) {
+  const color = CONTRIBUTION_COLORS[day.level];
+  const formattedDate = formatDateKorean(day.date);
   const radius = Math.round(size * 0.2);
 
   return (
@@ -86,7 +53,7 @@ function ContributionLegend({ showLabels = true }: ContributionLegendProps) {
   return (
     <div className="flex items-center gap-1.5 text-xs text-neutral-500">
       <span>Less</span>
-      {LEVEL_COLORS.map((color, index) => (
+      {CONTRIBUTION_COLORS.map((color, index) => (
         <div key={index} className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: color }} />
       ))}
       <span>More</span>
@@ -94,33 +61,7 @@ function ContributionLegend({ showLabels = true }: ContributionLegendProps) {
   );
 }
 
-// 월 라벨 계산 헬퍼
-function calculateMonthLabels(
-  weeks: ContributionWeek[],
-  offsetX: number = 0,
-  cellTotal: number = CELL_TOTAL,
-) {
-  const labels: Array<{ month: string; x: number }> = [];
-  let lastMonth = -1;
-
-  weeks.forEach((week, weekIndex) => {
-    const firstDay = week.days[0];
-    if (!firstDay) return;
-
-    const date = new Date(firstDay.date);
-    const month = date.getMonth();
-
-    if (month !== lastMonth) {
-      labels.push({
-        month: MONTH_LABELS[month],
-        x: weekIndex * cellTotal + offsetX,
-      });
-      lastMonth = month;
-    }
-  });
-
-  return labels;
-}
+// ============ 메인 컴포넌트 ============
 
 export function ContributionGraph() {
   const { data, isPending, isError } = useGetGithubContributions();
@@ -131,13 +72,13 @@ export function ContributionGraph() {
   // 월 라벨 위치 계산 (데스크탑용)
   const monthLabels = useMemo(() => {
     if (weeks.length === 0) return [];
-    return calculateMonthLabels(weeks, 28);
+    return calculateMonthLabels(weeks, 28, CONTRIBUTION_CELL.TOTAL);
   }, [weeks]);
 
   // 모바일용 월 라벨 (전체 1년치)
   const mobileMonthLabels = useMemo(() => {
     if (weeks.length === 0) return [];
-    return calculateMonthLabels(weeks, 0, MOBILE_CELL_TOTAL);
+    return calculateMonthLabels(weeks, 0, CONTRIBUTION_CELL_MOBILE.TOTAL);
   }, [weeks]);
 
   if (isPending) {
@@ -149,15 +90,15 @@ export function ContributionGraph() {
   }
 
   if (isError || !data) {
-    return null; // 에러 시 조용히 숨김
+    return null;
   }
 
   const totalWeeks = weeks.length;
-  const desktopWidth = totalWeeks * CELL_TOTAL + 28; // 요일 라벨 공간
-  const desktopHeight = 7 * CELL_TOTAL + 20; // 월 라벨 공간
+  const desktopWidth = totalWeeks * CONTRIBUTION_CELL.TOTAL + 28;
+  const desktopHeight = 7 * CONTRIBUTION_CELL.TOTAL + 20;
 
-  const mobileWidth = totalWeeks * MOBILE_CELL_TOTAL;
-  const mobileGraphHeight = 7 * MOBILE_CELL_TOTAL; // 그래프만 (월 라벨 제외)
+  const mobileWidth = totalWeeks * CONTRIBUTION_CELL_MOBILE.TOTAL;
+  const mobileGraphHeight = 7 * CONTRIBUTION_CELL_MOBILE.TOTAL;
 
   return (
     <div className="bg-white rounded-lg border border-neutral-200 p-4">
@@ -191,7 +132,7 @@ export function ContributionGraph() {
             <text
               key={index}
               x={0}
-              y={20 + index * CELL_TOTAL + CELL_SIZE}
+              y={20 + index * CONTRIBUTION_CELL.TOTAL + CONTRIBUTION_CELL.SIZE}
               className="fill-neutral-400 text-[10px]"
             >
               {label}
@@ -204,8 +145,8 @@ export function ContributionGraph() {
               <ContributionCell
                 key={day.date}
                 day={day}
-                x={weekIndex * CELL_TOTAL + 28}
-                y={dayIndex * CELL_TOTAL + 16}
+                x={weekIndex * CONTRIBUTION_CELL.TOTAL + 28}
+                y={dayIndex * CONTRIBUTION_CELL.TOTAL + 16}
               />
             )),
           )}
@@ -239,9 +180,9 @@ export function ContributionGraph() {
               <ContributionCell
                 key={day.date}
                 day={day}
-                x={weekIndex * MOBILE_CELL_TOTAL}
-                y={dayIndex * MOBILE_CELL_TOTAL}
-                size={MOBILE_CELL_SIZE}
+                x={weekIndex * CONTRIBUTION_CELL_MOBILE.TOTAL}
+                y={dayIndex * CONTRIBUTION_CELL_MOBILE.TOTAL}
+                size={CONTRIBUTION_CELL_MOBILE.SIZE}
               />
             )),
           )}

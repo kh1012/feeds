@@ -1,42 +1,10 @@
 import { NextResponse } from 'next/server';
-
-// GitHub Contribution 데이터 타입
-type ContributionDay = {
-  date: string;
-  contributionCount: number;
-  contributionLevel: 'NONE' | 'FIRST_QUARTILE' | 'SECOND_QUARTILE' | 'THIRD_QUARTILE' | 'FOURTH_QUARTILE';
-};
-
-type ContributionWeek = {
-  contributionDays: ContributionDay[];
-};
-
-type ContributionCalendar = {
-  totalContributions: number;
-  weeks: ContributionWeek[];
-};
-
-type GitHubGraphQLResponse = {
-  data?: {
-    user?: {
-      contributionsCollection: {
-        contributionCalendar: ContributionCalendar;
-      };
-    };
-  };
-  errors?: Array<{ message: string }>;
-};
-
-export type ContributionsResponse = {
-  totalContributions: number;
-  weeks: Array<{
-    days: Array<{
-      date: string;
-      count: number;
-      level: number;
-    }>;
-  }>;
-};
+import {
+  GitHubGraphQLResponse,
+  GitHubContributionLevel,
+  ContributionsData,
+  CONTRIBUTION_LEVEL_MAP,
+} from '@/types/github';
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
 
@@ -59,15 +27,8 @@ const CONTRIBUTION_QUERY = `
   }
 `;
 
-function mapContributionLevel(level: ContributionDay['contributionLevel']): number {
-  const levelMap: Record<ContributionDay['contributionLevel'], number> = {
-    NONE: 0,
-    FIRST_QUARTILE: 1,
-    SECOND_QUARTILE: 2,
-    THIRD_QUARTILE: 3,
-    FOURTH_QUARTILE: 4,
-  };
-  return levelMap[level];
+function mapContributionLevel(level: GitHubContributionLevel): number {
+  return CONTRIBUTION_LEVEL_MAP[level];
 }
 
 export async function GET() {
@@ -112,7 +73,7 @@ export async function GET() {
       throw new Error('No contribution data found');
     }
 
-    const result: ContributionsResponse = {
+    const result: ContributionsData = {
       totalContributions: calendar.totalContributions,
       weeks: calendar.weeks.map((week) => ({
         days: week.contributionDays.map((day) => ({
@@ -132,4 +93,3 @@ export async function GET() {
     );
   }
 }
-
