@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="지침용 RULE.md 축가">
-      <change beforePath="$PROJECT_DIR$/src/components/analysis/ReviewList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/analysis/ReviewList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/dateUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/dateUtils.ts" afterDir="false" />
-    </list>
+    <list default="true" id="c6849572-675d-4efd-b7a6-550f33e8e1e1" name="변경" comment="지침용 RULE.md 축가" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,6 +100,7 @@
       <workItem from="1764661419243" duration="193000" />
       <workItem from="1764723797505" duration="1837000" />
       <workItem from="1764810412922" duration="144000" />
+      <workItem from="1764818880951" duration="12000" />
     </task>
     <task id="LOCAL-00001" summary="기본 구성">
       <option name="closed" value="true" />

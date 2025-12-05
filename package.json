@@ -2,6 +2,9 @@
   "name": "feeds",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "baseline-browser-mapping": "^2.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

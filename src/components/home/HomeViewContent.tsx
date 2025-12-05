@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { FeedCard } from '@/components/home/FeedCard';
 import { MobileFilter } from '@/components/home/MobileFilter';
 import { DesktopFilterPanel } from '@/components/home/DesktopFilterPanel';
+import { ContributionGraph } from '@/components/home/ContributionGraph';
 import { Spinner } from '@/components/common/Spinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { HEIGHTS } from '@/define/heightDefines';
@@ -111,6 +112,11 @@ export default function HomeViewContent() {
 
             {/* 피드 영역 */}
             <div className="flex-1 min-w-0" style={{ maxWidth: 1000 }}>
+              {/* GitHub Contribution Graph */}
+              <div className="mb-4 px-4 lg:px-0 pt-4 lg:pt-0">
+                <ContributionGraph />
+              </div>
+
               <div className="flex flex-col gap-2 lg:gap-4">
                 {filteredContents.map((content) => (
                   <FeedCard

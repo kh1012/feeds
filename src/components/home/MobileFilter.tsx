@@ -58,9 +58,7 @@ export function MobileFilter({
         className="w-full px-4 py-3 flex items-center justify-between cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          <span className="text-base font-semibold text-neutral-800">
-            {filteredCount}개의 기록
-          </span>
+          <span className="text-base font-semibold text-neutral-800">{filteredCount}개의 기록</span>
           {hasActiveFilters && (
             <span className="text-sm text-neutral-400">(전체 {totalCount}개 중)</span>
           )}
@@ -100,8 +98,6 @@ export function MobileFilter({
           />
         </div>
       )}
-
-      <div className="h-2 bg-neutral-100" />
     </div>
   );
 }
@@ -116,13 +112,7 @@ function ChevronIcon({ expanded }: { expanded: boolean }) {
       stroke="currentColor"
       viewBox="0 0 24 24"
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M19 9l-7 7-7-7"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
     </svg>
   );
 }
-
