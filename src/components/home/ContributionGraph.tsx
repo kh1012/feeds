@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo } from 'react';
 import {
   useGetGithubContributions,
   ContributionDay,
@@ -94,13 +94,6 @@ function ContributionLegend({ showLabels = true }: ContributionLegendProps) {
   );
 }
 
-// 컨테이너 너비 기반으로 표시할 주 수 계산 (모바일용)
-function calculateWeeksToShow(containerWidth: number, padding: number = 32): number {
-  const availableWidth = containerWidth - padding; // padding 제외
-  const weeksCount = Math.floor(availableWidth / MOBILE_CELL_TOTAL);
-  return Math.max(8, Math.min(53, weeksCount)); // 최소 8주, 최대 53주
-}
-
 // 월 라벨 계산 헬퍼
 function calculateMonthLabels(
   weeks: ContributionWeek[],
@@ -131,38 +124,9 @@ function calculateMonthLabels(
 
 export function ContributionGraph() {
   const { data, isPending, isError } = useGetGithubContributions();
-  const mobileContainerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
-
-  // 컨테이너 너비 추적 (모바일용)
-  useEffect(() => {
-    const container = mobileContainerRef.current;
-    if (!container) return;
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerWidth(entry.contentRect.width);
-      }
-    });
-
-    resizeObserver.observe(container);
-    return () => resizeObserver.disconnect();
-  }, []);
-
-  // 모바일용 표시할 주 수 계산
-  const mobileWeeksToShow = useMemo(() => {
-    if (containerWidth === 0) return 17; // 초기값
-    return calculateWeeksToShow(containerWidth);
-  }, [containerWidth]);
 
   // weeks 데이터 추출
   const weeks = useMemo(() => data?.weeks ?? [], [data?.weeks]);
-
-  // 모바일용 최근 N주 데이터 추출
-  const mobileWeeks = useMemo(() => {
-    if (weeks.length === 0) return [];
-    return weeks.slice(-mobileWeeksToShow);
-  }, [weeks, mobileWeeksToShow]);
 
   // 월 라벨 위치 계산 (데스크탑용)
   const monthLabels = useMemo(() => {
@@ -170,11 +134,11 @@ export function ContributionGraph() {
     return calculateMonthLabels(weeks, 28);
   }, [weeks]);
 
-  // 모바일용 월 라벨
+  // 모바일용 월 라벨 (전체 1년치)
   const mobileMonthLabels = useMemo(() => {
-    if (mobileWeeks.length === 0) return [];
-    return calculateMonthLabels(mobileWeeks, 0, MOBILE_CELL_TOTAL);
-  }, [mobileWeeks]);
+    if (weeks.length === 0) return [];
+    return calculateMonthLabels(weeks, 0, MOBILE_CELL_TOTAL);
+  }, [weeks]);
 
   if (isPending) {
     return (
@@ -192,7 +156,7 @@ export function ContributionGraph() {
   const desktopWidth = totalWeeks * CELL_TOTAL + 28; // 요일 라벨 공간
   const desktopHeight = 7 * CELL_TOTAL + 20; // 월 라벨 공간
 
-  const mobileWidth = mobileWeeks.length * MOBILE_CELL_TOTAL;
+  const mobileWidth = totalWeeks * MOBILE_CELL_TOTAL;
   const mobileGraphHeight = 7 * MOBILE_CELL_TOTAL; // 그래프만 (월 라벨 제외)
 
   return (
@@ -249,7 +213,7 @@ export function ContributionGraph() {
       </div>
 
       {/* 모바일/태블릿 그래프 */}
-      <div ref={mobileContainerRef} className="lg:hidden">
+      <div className="lg:hidden">
         {/* 월 라벨 (HTML, 고정 폰트 크기) */}
         <div className="relative text-[10px] text-neutral-400 mb-1" style={{ height: 14 }}>
           {mobileMonthLabels.map((label, index) => (
@@ -270,7 +234,7 @@ export function ContributionGraph() {
           preserveAspectRatio="xMidYMid meet"
           className="block"
         >
-          {mobileWeeks.map((week, weekIndex) =>
+          {weeks.map((week, weekIndex) =>
             week.days.map((day, dayIndex) => (
               <ContributionCell
                 key={day.date}
