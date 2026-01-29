@@ -2,8 +2,10 @@ import { type TilContentType } from '@/define/tilDefines';
 import { FEEDS_URLS } from '@/define/urlDefines';
 
 export async function fetchTilContents(): Promise<TilContentType[]> {
-  const res = await fetch(`${FEEDS_URLS.GITHUB_TIL_README_RAW}`, {
-    next: { revalidate: 60 }, //60초 리패칭
+  // 캐시 버스팅을 위해 분 단위의 타임스탬프 추가 (GitHub Raw Cache 우회)
+  const t = Math.floor(Date.now() / (1000 * 60));
+  const res = await fetch(`${FEEDS_URLS.GITHUB_TIL_README_RAW}?t=${t}`, {
+    next: { revalidate: 60 }, // 60초 리패칭
   });
 
   if (!res.ok) {
