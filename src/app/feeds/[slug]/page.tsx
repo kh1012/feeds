@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { loadAllDocsWithUrl } from '@/components/heatmap/matrixBuilder';
+import { loadAllDocsWithUrl } from '@/utils/docLoader';
 import { FeedDetailContent } from '@/components/feeds/FeedDetailContent';
 import { getSlugFromUrl } from '@/utils/feedUtils';
 

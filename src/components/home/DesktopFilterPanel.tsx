@@ -1,90 +1,110 @@
+'use client';
+
+import { useState } from 'react';
 import { VisitedBadge } from '@/components/common/VisitedBadge';
-import { FilterSelect } from '@/components/common/FilterSelect';
+
+type TagCount = {
+  name: string;
+  count: number;
+};
 
 type DesktopFilterPanelProps = {
   visitorCount: number | null;
   isVisitorLoading: boolean;
-  filteredCount: number;
   totalCount: number;
-  hasActiveFilters: boolean;
-  selectedDomain: string | null;
-  selectedCategory: string | null;
-  domains: string[];
-  categories: string[];
-  onDomainChange: (domain: string | null) => void;
-  onCategoryChange: (category: string | null) => void;
-  onResetFilters: () => void;
+  domainCounts: TagCount[];
+  categoryCounts: TagCount[];
+  keywordCounts: TagCount[];
 };
+
+const PREVIEW_COUNT = 3;
+
+function ExpandableTagList({
+  label,
+  items,
+}: {
+  label: string;
+  items: TagCount[];
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const displayItems = expanded ? items : items.slice(0, PREVIEW_COUNT);
+  const hasMore = items.length > PREVIEW_COUNT;
+
+  return (
+    <div className="mb-4">
+      <h3 className="text-xs font-medium text-[var(--text-muted)] mb-2">{label}</h3>
+      <div className="space-y-1.5">
+        {displayItems.map(({ name, count }) => (
+          <div key={name} className="flex items-center justify-between">
+            <span className="text-sm text-[var(--foreground)] truncate mr-2">{name}</span>
+            <span className="text-xs font-medium text-[var(--text-muted)] bg-[var(--hover-bg)] px-2 py-0.5 rounded-full shrink-0">
+              {count}
+            </span>
+          </div>
+        ))}
+      </div>
+      {hasMore && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-2 text-xs text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-200 cursor-pointer"
+        >
+          {expanded ? '접기' : `전체보기 (${items.length})`}
+        </button>
+      )}
+    </div>
+  );
+}
 
 export function DesktopFilterPanel({
   visitorCount,
   isVisitorLoading,
-  filteredCount,
   totalCount,
-  hasActiveFilters,
-  selectedDomain,
-  selectedCategory,
-  domains,
-  categories,
-  onDomainChange,
-  onCategoryChange,
-  onResetFilters,
+  domainCounts,
+  categoryCounts,
+  keywordCounts,
 }: DesktopFilterPanelProps) {
   return (
     <aside className="hidden lg:block w-56 shrink-0">
-      <div className="sticky top-16">
-        <div className="bg-white rounded-lg border border-neutral-200 p-4">
+      <div className="sticky top-20">
+        <div className="bg-[var(--card-bg)] rounded-xl border border-[var(--card-border)]/80 p-5 max-h-[calc(100vh-120px)] overflow-y-auto custom-scrollbar">
           {/* Visited 배지 */}
-          <div className="mb-3 pb-3 border-b border-neutral-200">
+          <div className="mb-4 pb-4 border-b border-[var(--light-border)]">
             <VisitedBadge count={visitorCount} isLoading={isVisitorLoading} />
           </div>
 
-          <h2 className="text-sm font-semibold text-neutral-800 mb-3">필터</h2>
-
-          {/* Domain 필터 */}
-          <div className="mb-3">
-            <FilterSelect
-              label="Domain"
-              value={selectedDomain}
-              options={domains}
-              placeholder="All Domains"
-              onChange={onDomainChange}
-            />
-          </div>
-
-          {/* Category 필터 */}
-          <div className="mb-4">
-            <FilterSelect
-              label="Category"
-              value={selectedCategory}
-              options={categories}
-              placeholder="All Categories"
-              onChange={onCategoryChange}
-            />
-          </div>
-
-          {/* 필터 초기화 */}
-          {hasActiveFilters && (
-            <button
-              onClick={onResetFilters}
-              className="w-full px-3 py-2 text-sm text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors mb-4"
-            >
-              초기화
-            </button>
-          )}
-
-          {/* 결과 카운트 */}
-          <div className="pt-3 border-t border-neutral-200">
-            <p className="text-base font-semibold text-neutral-800">
-              {filteredCount}개의 기록
+          {/* 전체 기록 수 */}
+          <div className="mb-4 pb-4 border-b border-[var(--light-border)]">
+            <p className="text-base font-semibold text-[var(--foreground)]">
+              {totalCount}개의 기록
             </p>
-            {hasActiveFilters && (
-              <p className="text-xs text-neutral-400 mt-1">전체 {totalCount}개 중</p>
-            )}
+          </div>
+
+          {/* 요약 */}
+          <h2 className="text-sm font-semibold text-[var(--foreground)] mb-3">요약</h2>
+
+          {/* Domain 요약 */}
+          <ExpandableTagList label="Domain" items={domainCounts} />
+
+          {/* Category 요약 */}
+          <ExpandableTagList label="Category" items={categoryCounts} />
+
+          {/* Keyword 요약 */}
+          <div>
+            <h3 className="text-xs font-medium text-[var(--text-muted)] mb-2">Keywords</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {keywordCounts.map(({ name, count }) => (
+                <span
+                  key={name}
+                  className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)] bg-[var(--hover-bg)] px-2 py-1 rounded-full"
+                >
+                  {name}
+                  <span className="text-[var(--text-muted)]">{count}</span>
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </aside>
   );
 }
-

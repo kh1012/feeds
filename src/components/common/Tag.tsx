@@ -6,7 +6,7 @@ interface TagProps {
 
 export default function Tag({ children }: TagProps) {
   return (
-    <div className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-600 w-fit">
+    <div className="rounded-full bg-[var(--hover-bg)] px-2.5 py-0.5 text-[10px] font-medium text-[var(--text-secondary)] w-fit">
       {children}
     </div>
   );

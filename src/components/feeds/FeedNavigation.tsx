@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { DocMetaWithUrl } from '@/components/heatmap/heatmapTypes';
+import { DocMetaWithUrl } from '@/define/metaDefines';
 import { getSlugFromUrl } from '@/utils/feedUtils';
 import {
   formatDateWithDay,
@@ -78,8 +78,8 @@ export function FeedNavigation({ docs, currentSlug }: FeedNavigationProps) {
 
   return (
     <nav className="w-64 shrink-0 hidden lg:block">
-      <div className="sticky top-16 bg-white rounded-lg border border-neutral-200 p-4 max-h-[calc(100vh-80px)] overflow-y-auto">
-        <h2 className="text-sm font-semibold text-neutral-800 mb-3">목차</h2>
+      <div className="sticky top-20 bg-[var(--card-bg)] rounded-xl border border-[var(--card-border)]/80 p-5 max-h-[31.25rem] overflow-y-auto custom-scrollbar">
+        <h2 className="text-sm font-semibold text-[var(--foreground)] mb-4">목차</h2>
 
         <div className="space-y-1">
           {groupedData.map((monthGroup) => {
@@ -90,13 +90,13 @@ export function FeedNavigation({ docs, currentSlug }: FeedNavigationProps) {
                 {/* 월 헤더 */}
                 <button
                   onClick={() => toggleMonth(monthGroup.label)}
-                  className="w-full flex items-center justify-between py-1.5 px-2 hover:bg-neutral-50 rounded-md transition-colors"
+                  className="w-full flex items-center justify-between py-2 px-2.5 hover:bg-[var(--hover-bg)]/60 rounded-lg transition-all duration-200"
                 >
-                  <span className="text-sm font-medium text-neutral-700">{monthGroup.label}</span>
+                  <span className="text-sm font-medium text-[var(--foreground)]">{monthGroup.label}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-neutral-400">{monthGroup.docs.length}</span>
+                    <span className="text-xs text-[var(--text-muted)]">{monthGroup.docs.length}</span>
                     <svg
-                      className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 text-[var(--text-muted)] transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -122,17 +122,17 @@ export function FeedNavigation({ docs, currentSlug }: FeedNavigationProps) {
                         <Link
                           key={doc.rawUrl}
                           href={`/feeds/${slug}`}
-                          className={`block px-2 py-1.5 rounded-md transition-colors ${
+                          className={`block px-2.5 py-2 rounded-lg transition-all duration-200 ${
                             isActive
-                              ? 'bg-blue-50 text-blue-700'
-                              : 'text-neutral-600 hover:bg-neutral-50'
+                              ? 'bg-[var(--accent-light)] text-[var(--accent-text)]'
+                              : 'text-[var(--text-secondary)] hover:bg-[var(--hover-bg)]/60'
                           }`}
                           title={doc.topic}
                         >
                           <div className={`text-xs truncate ${isActive ? 'font-medium' : ''}`}>
                             {doc.topic}
                           </div>
-                          <div className="text-[10px] text-neutral-400 mt-0.5">
+                          <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
                             {formatDateWithDay(doc.date)}
                           </div>
                         </Link>

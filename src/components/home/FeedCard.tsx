@@ -34,35 +34,35 @@ export const FeedCard = ({ content, meta }: FeedCardProps) => {
   };
 
   return (
-    <article className="w-full bg-white rounded-lg border border-neutral-200 hover:border-neutral-300 hover:shadow-sm transition-all">
-      <Link href={`/feeds/${slug}`} className="block p-4">
+    <article className="w-full bg-[var(--card-bg)] rounded-xl border border-[var(--card-border)]/80 hover:border-[var(--text-muted)] hover:shadow-[0_4px_24px_rgba(171,155,133,0.10)] active:scale-[0.98] active:shadow-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
+      <Link href={`/feeds/${slug}`} className="block p-6">
         {/* 헤더: 프로필 + 날짜 */}
-        <header className="flex items-center gap-3 mb-3">
+        <header className="flex items-center gap-3 mb-4">
           <Image
             src={`${FEEDS_URLS.GITHUB_TIL_ASSETS_RAW}/profile-img.jpg`}
             alt={'프로필'}
             width={40}
             height={40}
-            className="size-9 rounded-full border border-neutral-200 object-cover"
+            className="size-9 rounded-full border border-[var(--card-border)] object-cover"
             loading={'lazy'}
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-neutral-900 text-sm">kh1012</span>
-              <span className="text-neutral-300">·</span>
-              <span className="text-neutral-500 text-xs">{formatDateWithDay(content.date)}</span>
+              <span className="font-medium text-[var(--foreground)] text-sm">kh1012</span>
+              <span className="text-[var(--text-muted)]">&middot;</span>
+              <span className="text-[var(--text-muted)] text-xs">{formatDateWithDay(content.date)}</span>
             </div>
           </div>
         </header>
 
         {/* 제목 */}
-        <h2 className="text-lg font-semibold text-neutral-900 mb-2 leading-snug">
+        <h2 className="text-lg font-semibold text-[var(--foreground)] mb-2.5 leading-snug tracking-tight">
           {meta?.topic ?? content.title}
         </h2>
 
         {/* 요약 */}
         {meta?.summary && (
-          <p className="text-sm text-neutral-600 line-clamp-3 mb-3 leading-relaxed">
+          <p className="text-sm text-[var(--text-secondary)] line-clamp-3 mb-4 leading-relaxed">
             {meta.summary}
           </p>
         )}
@@ -72,10 +72,10 @@ export const FeedCard = ({ content, meta }: FeedCardProps) => {
           {/* Domain / Category 배지 */}
           {meta && (
             <>
-              <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-50 text-blue-600">
+              <span className="px-2.5 py-0.5 text-[10px] font-medium rounded-full bg-[var(--accent-light)] text-[var(--accent-text)]">
                 {formatName(meta.domain)}
               </span>
-              <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-neutral-100 text-neutral-600">
+              <span className="px-2.5 py-0.5 text-[10px] font-medium rounded-full bg-[var(--hover-bg)] text-[var(--text-secondary)]">
                 {formatName(meta.category)}
               </span>
             </>
@@ -87,16 +87,16 @@ export const FeedCard = ({ content, meta }: FeedCardProps) => {
           ))}
           {isLongKeywords && (
             <Button onClick={onClickKeywordsExpandHandler} transparent>
-              <span className="text-xs text-blue-400">{!keywordsExpanded ? '...' : ''}</span>
+              <span className="text-xs text-[var(--accent)]">{!keywordsExpanded ? '...' : ''}</span>
             </Button>
           )}
         </div>
       </Link>
 
       {/* 푸터: GitHub 링크 */}
-      <div className="px-4 py-2.5 border-t border-neutral-100 flex items-center justify-between">
+      <div className="px-6 py-3 border-t border-[var(--light-border)] flex items-center justify-between">
         <a
-          className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-600 transition-colors"
+          className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors duration-200"
           href={content.url}
           target="_blank"
           rel="noopener noreferrer"
@@ -107,7 +107,7 @@ export const FeedCard = ({ content, meta }: FeedCardProps) => {
           </svg>
           <span className="hidden sm:inline">GitHub</span>
         </a>
-        <span className="text-xs text-neutral-400">
+        <span className="text-xs text-[var(--text-muted)]">
           {getSlugFromUrl(content.rawUrl)}
         </span>
       </div>

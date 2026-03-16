@@ -1,13 +1,22 @@
 // 차트 관련 상수 정의
 
 /** GitHub 잔디 색상 (레벨 0~4) */
-export const CONTRIBUTION_COLORS = [
-  '#ebedf0', // Level 0: 기여 없음
-  '#9be9a8', // Level 1
-  '#40c463', // Level 2
-  '#30a14e', // Level 3
-  '#216e39', // Level 4
-] as const;
+export const CONTRIBUTION_COLORS = {
+  light: [
+    '#ebedf0', // Level 0: 기여 없음
+    '#9be9a8', // Level 1
+    '#40c463', // Level 2
+    '#30a14e', // Level 3
+    '#216e39', // Level 4
+  ],
+  dark: [
+    '#3E3D3A', // Level 0: 기여 없음 (dark)
+    '#0e4429', // Level 1
+    '#006d32', // Level 2
+    '#26a641', // Level 3
+    '#39d353', // Level 4
+  ],
+} as const;
 
 /** 월 라벨 (영문 약어) */
 export const MONTH_LABELS = [

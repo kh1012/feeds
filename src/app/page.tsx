@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import HomeViewContent from '@/components/home/HomeViewContent';
-import { loadAllDocsWithUrl } from '@/components/heatmap/matrixBuilder';
+import { loadAllDocsWithUrl } from '@/utils/docLoader';
 
 // 동적 메타데이터 생성
 export async function generateMetadata(): Promise<Metadata> {

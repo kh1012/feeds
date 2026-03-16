@@ -9,67 +9,69 @@ import { Spinner } from '@/components/common/Spinner';
 import { MiniSpinner } from '@/components/common/MiniSpinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
 import { HEIGHTS } from '@/define/heightDefines';
-import { useGetFeedContents, extractFilters, filterDocs } from '@/hooks/useGetFeedContents';
+import { useGetFeedContents } from '@/hooks/useGetFeedContents';
 import { useVisitorCount } from '@/hooks/useVisitorCount';
+import { DocMetaWithUrl } from '@/define/metaDefines';
+import { formatName } from '@/utils/formatUtils';
 
 const ITEMS_PER_PAGE = 10;
+const TOP_KEYWORDS_COUNT = 10;
+
+type TagCount = { name: string; count: number };
+
+/** 태그 카운트 계산 */
+function computeTagCounts(docs: DocMetaWithUrl[]) {
+  const domainMap = new Map<string, number>();
+  const categoryMap = new Map<string, number>();
+  const keywordMap = new Map<string, number>();
+
+  for (const doc of docs) {
+    domainMap.set(doc.domain, (domainMap.get(doc.domain) || 0) + 1);
+    categoryMap.set(doc.category, (categoryMap.get(doc.category) || 0) + 1);
+    for (const kw of doc.keywords) {
+      keywordMap.set(kw, (keywordMap.get(kw) || 0) + 1);
+    }
+  }
+
+  const toSorted = (map: Map<string, number>): TagCount[] =>
+    Array.from(map.entries())
+      .map(([name, count]) => ({ name: formatName(name), count }))
+      .sort((a, b) => b.count - a.count);
+
+  return {
+    domainCounts: toSorted(domainMap),
+    categoryCounts: toSorted(categoryMap),
+    keywordCounts: toSorted(keywordMap).slice(0, TOP_KEYWORDS_COUNT),
+  };
+}
 
 export default function HomeViewContent() {
   const { data: contents, isPending, isError } = useGetFeedContents();
   const { count: visitorCount, isLoading: isVisitorLoading } = useVisitorCount();
-  const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // 필터 옵션 추출
-  const filterOptions = useMemo(() => {
-    if (!contents) return { domains: [], categories: [] };
-    return extractFilters(contents);
+  // 태그 카운트 계산
+  const tagCounts = useMemo(() => {
+    if (!contents) return { domainCounts: [], categoryCounts: [], keywordCounts: [] };
+    return computeTagCounts(contents);
   }, [contents]);
-
-  // 선택된 도메인에 해당하는 카테고리만 필터링
-  const availableCategories = useMemo(() => {
-    if (!contents) return [];
-    if (!selectedDomain) return filterOptions.categories;
-
-    const categoriesInDomain = new Set<string>();
-    for (const doc of contents) {
-      if (doc.domain === selectedDomain) {
-        categoriesInDomain.add(doc.category);
-      }
-    }
-    return Array.from(categoriesInDomain).sort();
-  }, [contents, selectedDomain, filterOptions.categories]);
-
-  // 필터링된 콘텐츠
-  const filteredContents = useMemo(() => {
-    if (!contents) return [];
-    return filterDocs(contents, {
-      domain: selectedDomain,
-      category: selectedCategory,
-    });
-  }, [contents, selectedDomain, selectedCategory]);
-
-  // 필터 변경 시 displayCount 리셋
-  useEffect(() => {
-    setDisplayCount(ITEMS_PER_PAGE);
-  }, [selectedDomain, selectedCategory]);
 
   // 현재 표시할 콘텐츠
   const displayedContents = useMemo(() => {
-    return filteredContents.slice(0, displayCount);
-  }, [filteredContents, displayCount]);
+    if (!contents) return [];
+    return contents.slice(0, displayCount);
+  }, [contents, displayCount]);
 
   // 더 불러올 수 있는지 여부
-  const hasMore = displayCount < filteredContents.length;
+  const hasMore = contents ? displayCount < contents.length : false;
 
   // 더 불러오기 함수
   const loadMore = useCallback(() => {
-    if (hasMore) {
-      setDisplayCount((prev) => Math.min(prev + ITEMS_PER_PAGE, filteredContents.length));
+    if (hasMore && contents) {
+      setDisplayCount((prev) => Math.min(prev + ITEMS_PER_PAGE, contents.length));
     }
-  }, [hasMore, filteredContents.length]);
+  }, [hasMore, contents]);
 
   // IntersectionObserver로 무한 스크롤 구현
   useEffect(() => {
@@ -94,20 +96,6 @@ export default function HomeViewContent() {
     };
   }, [hasMore, loadMore]);
 
-  // 도메인 선택 핸들러
-  const handleDomainChange = (domain: string | null) => {
-    setSelectedDomain(domain);
-    if (domain !== selectedDomain) {
-      setSelectedCategory(null);
-    }
-  };
-
-  // 필터 초기화
-  const handleResetFilters = () => {
-    setSelectedDomain(null);
-    setSelectedCategory(null);
-  };
-
   // 최초 로딩 시에만 스피너 표시
   if (isPending && !contents) {
     return (
@@ -120,7 +108,7 @@ export default function HomeViewContent() {
   if (isError || !contents || contents.length === 0) {
     return (
       <div
-        className="w-full flex justify-center items-center text-neutral-500 py-20"
+        className="w-full flex justify-center items-center text-[var(--text-muted)] py-20"
         style={{ marginTop: HEIGHTS.GNB_HEIGHT }}
       >
         데이터를 불러올 수 없습니다.
@@ -128,40 +116,29 @@ export default function HomeViewContent() {
     );
   }
 
-  const hasActiveFilters = selectedDomain !== null || selectedCategory !== null;
-
-  // 공통 필터 props
-  const filterProps = {
+  const summaryProps = {
     visitorCount,
     isVisitorLoading,
-    filteredCount: filteredContents.length,
     totalCount: contents.length,
-    hasActiveFilters,
-    selectedDomain,
-    selectedCategory,
-    domains: filterOptions.domains,
-    categories: availableCategories,
-    onDomainChange: handleDomainChange,
-    onCategoryChange: setSelectedCategory,
-    onResetFilters: handleResetFilters,
+    ...tagCounts,
   };
 
   return (
     <div style={{ marginTop: HEIGHTS.GNB_HEIGHT }}>
-      {/* 모바일 필터 */}
-      <MobileFilter {...filterProps} />
+      {/* 모바일 요약 */}
+      <MobileFilter {...summaryProps} />
 
       {/* 메인 콘텐츠 영역 */}
-      <div className="bg-neutral-100 lg:bg-neutral-50 min-h-screen">
-        <div className="mx-auto lg:px-6 lg:py-4" style={{ maxWidth: 1248 }}>
-          <div className="flex gap-6">
-            {/* PC 필터 패널 */}
-            <DesktopFilterPanel {...filterProps} />
+      <div className="bg-[var(--background)] min-h-screen">
+        <div className="mx-auto lg:px-8 lg:py-6" style={{ maxWidth: 1248 }}>
+          <div className="flex gap-8">
+            {/* PC 요약 패널 */}
+            <DesktopFilterPanel {...summaryProps} />
 
             {/* 피드 영역 */}
             <div className="flex-1 min-w-0" style={{ maxWidth: 1000 }}>
               {/* GitHub Contribution Graph */}
-              <div className="mb-4 px-4 lg:px-0 pt-4 lg:pt-0">
+              <div className="mb-6 px-4 lg:px-0 pt-5 lg:pt-0">
                 <ContributionGraph />
               </div>
 
@@ -184,7 +161,7 @@ export default function HomeViewContent() {
                 {hasMore && (
                   <div
                     ref={loadMoreRef}
-                    className="flex justify-center items-center py-8"
+                    className="flex justify-center items-center py-10"
                   >
                     <MiniSpinner />
                   </div>
@@ -192,7 +169,7 @@ export default function HomeViewContent() {
 
                 {/* 모두 로드됨 표시 */}
                 {!hasMore && displayedContents.length > 0 && (
-                  <div className="text-center py-8 text-sm text-neutral-400">
+                  <div className="text-center py-10 text-sm text-[var(--text-muted)]">
                     모든 피드를 불러왔습니다
                   </div>
                 )}

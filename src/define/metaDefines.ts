@@ -14,3 +14,12 @@ export type DocMeta = {
   // 만족도 데이터
   satisfaction?: SatisfactionData;
 };
+
+/** URL이 포함된 문서 메타 타입 */
+export type DocMetaWithUrl = DocMeta & {
+  rawUrl: string;
+  url: string;
+  title: string;
+  date: string;
+  summary: string;
+};

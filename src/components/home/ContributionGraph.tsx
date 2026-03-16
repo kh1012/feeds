@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { useGetGithubContributions } from '@/hooks/useGetGithubContributions';
 import { Spinner } from '@/components/common/Spinner';
+import { useTheme } from '@/components/providers/ThemeProvider';
 import { ContributionDay } from '@/types/github';
 import {
   CONTRIBUTION_COLORS,
@@ -20,10 +21,11 @@ type ContributionCellProps = {
   x: number;
   y: number;
   size?: number;
+  colors: readonly string[];
 };
 
-function ContributionCell({ day, x, y, size = CONTRIBUTION_CELL.SIZE }: ContributionCellProps) {
-  const color = CONTRIBUTION_COLORS[day.level];
+function ContributionCell({ day, x, y, size = CONTRIBUTION_CELL.SIZE, colors }: ContributionCellProps) {
+  const color = colors[day.level];
   const formattedDate = formatDateKorean(day.date);
   const radius = Math.round(size * 0.2);
 
@@ -47,13 +49,13 @@ type ContributionLegendProps = {
   showLabels?: boolean;
 };
 
-function ContributionLegend({ showLabels = true }: ContributionLegendProps) {
+function ContributionLegend({ showLabels = true, colors }: ContributionLegendProps & { colors: readonly string[] }) {
   if (!showLabels) return null;
 
   return (
-    <div className="flex items-center gap-1.5 text-xs text-neutral-500">
+    <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
       <span>Less</span>
-      {CONTRIBUTION_COLORS.map((color, index) => (
+      {colors.map((color, index) => (
         <div key={index} className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: color }} />
       ))}
       <span>More</span>
@@ -65,6 +67,8 @@ function ContributionLegend({ showLabels = true }: ContributionLegendProps) {
 
 export function ContributionGraph() {
   const { data, isPending, isError } = useGetGithubContributions();
+  const { theme } = useTheme();
+  const colors = CONTRIBUTION_COLORS[theme];
 
   // weeks 데이터 추출
   const weeks = useMemo(() => data?.weeks ?? [], [data?.weeks]);
@@ -83,7 +87,7 @@ export function ContributionGraph() {
 
   if (isPending) {
     return (
-      <div className="bg-white rounded-lg border border-neutral-200 p-4 flex items-center justify-center min-h-[100px] lg:min-h-[140px]">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--card-border)] p-4 flex items-center justify-center min-h-[100px] lg:min-h-[140px]">
         <Spinner />
       </div>
     );
@@ -101,14 +105,14 @@ export function ContributionGraph() {
   const mobileGraphHeight = 7 * CONTRIBUTION_CELL_MOBILE.TOTAL;
 
   return (
-    <div className="bg-white rounded-lg border border-neutral-200 p-4">
+    <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--card-border)] p-4">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-neutral-800">
+        <h3 className="text-sm font-semibold text-[var(--foreground)]">
           {data.totalContributions.toLocaleString()} contributions in the last year
         </h3>
         <div className="hidden sm:block">
-          <ContributionLegend />
+          <ContributionLegend colors={colors} />
         </div>
       </div>
 
@@ -122,7 +126,7 @@ export function ContributionGraph() {
         >
           {/* 월 라벨 */}
           {monthLabels.map((label, index) => (
-            <text key={index} x={label.x} y={10} className="fill-neutral-400 text-[10px]">
+            <text key={index} x={label.x} y={10} className="fill-[var(--text-muted)] text-[10px]">
               {label.month}
             </text>
           ))}
@@ -133,7 +137,7 @@ export function ContributionGraph() {
               key={index}
               x={0}
               y={20 + index * CONTRIBUTION_CELL.TOTAL + CONTRIBUTION_CELL.SIZE}
-              className="fill-neutral-400 text-[10px]"
+              className="fill-[var(--text-muted)] text-[10px]"
             >
               {label}
             </text>
@@ -147,6 +151,7 @@ export function ContributionGraph() {
                 day={day}
                 x={weekIndex * CONTRIBUTION_CELL.TOTAL + 28}
                 y={dayIndex * CONTRIBUTION_CELL.TOTAL + 16}
+                colors={colors}
               />
             )),
           )}
@@ -156,7 +161,7 @@ export function ContributionGraph() {
       {/* 모바일/태블릿 그래프 */}
       <div className="lg:hidden">
         {/* 월 라벨 (HTML, 고정 폰트 크기) */}
-        <div className="relative text-[10px] text-neutral-400 mb-1" style={{ height: 14 }}>
+        <div className="relative text-[10px] text-[var(--text-muted)] mb-1" style={{ height: 14 }}>
           {mobileMonthLabels.map((label, index) => (
             <span
               key={index}
@@ -183,6 +188,7 @@ export function ContributionGraph() {
                 x={weekIndex * CONTRIBUTION_CELL_MOBILE.TOTAL}
                 y={dayIndex * CONTRIBUTION_CELL_MOBILE.TOTAL}
                 size={CONTRIBUTION_CELL_MOBILE.SIZE}
+                colors={colors}
               />
             )),
           )}
@@ -190,7 +196,7 @@ export function ContributionGraph() {
 
         {/* 모바일 레전드 */}
         <div className="flex justify-end mt-2 sm:hidden">
-          <ContributionLegend showLabels={false} />
+          <ContributionLegend showLabels={false} colors={colors} />
         </div>
       </div>
     </div>

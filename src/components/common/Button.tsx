@@ -16,7 +16,7 @@ export default function Button({ children, onClick, transparent }: ButtonProps) 
       ) : (
         <button
           type={'button'}
-          className="rounded-[9999] border border-[#d1d9e0] bg-[#f6f8fa] px-4 py-2 text-xs text-[#1f2328] transition-colors hover:bg-[#eaeef2] cursor-pointer w-fit sm:text-sm"
+          className="rounded-lg border border-[var(--card-border)] bg-[var(--card-bg)] px-4 py-2 text-xs text-[var(--foreground)] transition-all duration-200 hover:bg-[var(--hover-bg)] hover:border-[var(--text-muted)] cursor-pointer w-fit sm:text-sm"
           onClick={onClick}
         >
           {children}

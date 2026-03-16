@@ -2,36 +2,28 @@
 
 import { useState } from 'react';
 import { VisitedBadge } from '@/components/common/VisitedBadge';
-import { FilterSelect } from '@/components/common/FilterSelect';
+
+type TagCount = {
+  name: string;
+  count: number;
+};
 
 type MobileFilterProps = {
   visitorCount: number | null;
   isVisitorLoading: boolean;
-  filteredCount: number;
   totalCount: number;
-  hasActiveFilters: boolean;
-  selectedDomain: string | null;
-  selectedCategory: string | null;
-  domains: string[];
-  categories: string[];
-  onDomainChange: (domain: string | null) => void;
-  onCategoryChange: (category: string | null) => void;
-  onResetFilters: () => void;
+  domainCounts: TagCount[];
+  categoryCounts: TagCount[];
+  keywordCounts: TagCount[];
 };
 
 export function MobileFilter({
   visitorCount,
   isVisitorLoading,
-  filteredCount,
   totalCount,
-  hasActiveFilters,
-  selectedDomain,
-  selectedCategory,
-  domains,
-  categories,
-  onDomainChange,
-  onCategoryChange,
-  onResetFilters,
+  domainCounts,
+  categoryCounts,
+  keywordCounts,
 }: MobileFilterProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -43,13 +35,8 @@ export function MobileFilter({
   };
 
   return (
-    <div className="lg:hidden bg-white border-b border-neutral-200">
-      {/* Visited 배지 */}
-      <div className="px-4 pt-3 pb-1">
-        <VisitedBadge count={visitorCount} isLoading={isVisitorLoading} />
-      </div>
-
-      {/* 기록 카운트 + 토글 버튼 */}
+    <div className="lg:hidden bg-[var(--card-bg)] border-b border-[var(--card-border)]/60">
+      {/* Visited + 기록 수 + 요약 토글 (한 줄) */}
       <div
         role="button"
         tabIndex={0}
@@ -57,45 +44,66 @@ export function MobileFilter({
         onKeyDown={handleKeyDown}
         className="w-full px-4 py-3 flex items-center justify-between cursor-pointer"
       >
-        <div className="flex items-center gap-2">
-          <span className="text-base font-semibold text-neutral-800">{filteredCount}개의 기록</span>
-          {hasActiveFilters && (
-            <span className="text-sm text-neutral-400">(전체 {totalCount}개 중)</span>
-          )}
+        <div className="flex items-center gap-3">
+          <VisitedBadge count={visitorCount} isLoading={isVisitorLoading} />
+          <span className="text-sm font-semibold text-[var(--foreground)]">{totalCount}개의 기록</span>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {hasActiveFilters && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onResetFilters();
-              }}
-              className="px-2 py-1 text-sm text-blue-500 hover:text-blue-600"
-            >
-              초기화
-            </button>
-          )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-xs text-[var(--text-muted)]">요약</span>
           <ChevronIcon expanded={expanded} />
         </div>
       </div>
 
-      {/* 확장되는 필터 영역 */}
+      {/* 확장되는 요약 영역 */}
       {expanded && (
-        <div className="px-4 pb-3 space-y-2">
-          <FilterSelect
-            label="Domain"
-            value={selectedDomain}
-            options={domains}
-            placeholder="All Domains"
-            onChange={onDomainChange}
-          />
-          <FilterSelect
-            label="Category"
-            value={selectedCategory}
-            options={categories}
-            placeholder="All Categories"
-            onChange={onCategoryChange}
-          />
+        <div className="px-4 pb-4 space-y-4">
+          {/* Domain */}
+          <div>
+            <h3 className="text-xs font-medium text-[var(--text-muted)] mb-2">Domain</h3>
+            <div className="flex flex-wrap gap-2">
+              {domainCounts.map(({ name, count }) => (
+                <span
+                  key={name}
+                  className="inline-flex items-center gap-1.5 text-sm text-[var(--foreground)] bg-[var(--hover-bg)] px-2.5 py-1 rounded-full"
+                >
+                  {name}
+                  <span className="text-xs text-[var(--text-muted)]">{count}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Category */}
+          <div>
+            <h3 className="text-xs font-medium text-[var(--text-muted)] mb-2">Category</h3>
+            <div className="flex flex-wrap gap-2">
+              {categoryCounts.map(({ name, count }) => (
+                <span
+                  key={name}
+                  className="inline-flex items-center gap-1.5 text-sm text-[var(--foreground)] bg-[var(--hover-bg)] px-2.5 py-1 rounded-full"
+                >
+                  {name}
+                  <span className="text-xs text-[var(--text-muted)]">{count}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Keywords (상위 10개) */}
+          <div>
+            <h3 className="text-xs font-medium text-[var(--text-muted)] mb-2">Keywords</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {keywordCounts.map(({ name, count }) => (
+                <span
+                  key={name}
+                  className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)] bg-[var(--hover-bg)] px-2 py-1 rounded-full"
+                >
+                  {name}
+                  <span className="text-[var(--text-muted)]">{count}</span>
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -105,7 +113,7 @@ export function MobileFilter({
 function ChevronIcon({ expanded }: { expanded: boolean }) {
   return (
     <svg
-      className={`w-5 h-5 text-neutral-400 transition-transform shrink-0 ${
+      className={`w-5 h-5 text-[var(--text-muted)] transition-transform duration-200 shrink-0 ${
         expanded ? 'rotate-180' : ''
       }`}
       fill="none"
