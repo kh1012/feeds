@@ -21,7 +21,9 @@ export function useGetContents() {
   return useQuery<ContentItem[]>({
     queryKey: CONTENTS_QUERY_KEY,
     queryFn: fetchContents,
-    staleTime: 60 * 1000, // 1분
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 }
 

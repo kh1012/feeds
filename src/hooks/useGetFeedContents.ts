@@ -8,5 +8,8 @@ export function useGetFeedContents() {
   return useQuery<DocMetaWithUrl[]>({
     queryKey: FEED_CONTENTS_QUERY_KEY,
     queryFn: loadAllDocsWithUrl,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 }
