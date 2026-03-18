@@ -17,6 +17,7 @@ import { FEEDS_URLS } from '@/define/urlDefines';
 import { HEIGHTS } from '@/define/heightDefines';
 import Tag from '@/components/common/Tag';
 import { Loader } from 'lucide-react';
+import RelatedFeeds from '@/components/feeds/RelatedFeeds';
 
 type FeedDetailContentProps = {
   doc: DocMetaWithUrl;
@@ -203,6 +204,9 @@ export function FeedDetailContent({ doc, docs, slug }: FeedDetailContentProps) {
                   </a>
                 </div>
               </article>
+
+              {/* 관련 글 추천 */}
+              <RelatedFeeds currentDoc={doc} allDocs={docs} />
 
               {/* 이전/다음 네비게이션 */}
               <div className="mt-5 grid grid-cols-2 gap-4 px-4 lg:px-0 pb-6 lg:pb-0">

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Search } from 'lucide-react';
 import { FEEDS_URLS } from '@/define/urlDefines';
 import IconGithubLogoWhite from '@/icons/githubLogoWhite';
 import { useTheme } from '@/components/providers/ThemeProvider';
@@ -49,6 +49,15 @@ export default function GNB() {
         </nav>
 
         <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('open-search'))}
+            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--foreground)] hover:bg-[var(--hover-bg)]/60 transition-all duration-200 cursor-pointer"
+            aria-label="검색 (Cmd+K)"
+          >
+            <Search size={20} />
+          </button>
+
           <button
             type="button"
             onClick={toggleTheme}

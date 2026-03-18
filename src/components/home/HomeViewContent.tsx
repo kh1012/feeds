@@ -8,6 +8,7 @@ import { ContributionGraph } from '@/components/home/ContributionGraph';
 import { Spinner } from '@/components/common/Spinner';
 import { MiniSpinner } from '@/components/common/MiniSpinner';
 import PortalOverlay from '@/components/common/PortalOverlay';
+import SearchBar from '@/components/home/SearchBar';
 import { HEIGHTS } from '@/define/heightDefines';
 import { useGetFeedContents } from '@/hooks/useGetFeedContents';
 import { useVisitorCount } from '@/hooks/useVisitorCount';
@@ -49,7 +50,27 @@ export default function HomeViewContent() {
   const { data: contents, isPending, isError } = useGetFeedContents();
   const { count: visitorCount, isLoading: isVisitorLoading } = useVisitorCount();
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Cmd+K / Ctrl+K 이벤트 리스너
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // GNB 검색 버튼 이벤트 리스너
+  useEffect(() => {
+    const handleOpenSearch = () => setIsSearchOpen(true);
+    window.addEventListener('open-search', handleOpenSearch);
+    return () => window.removeEventListener('open-search', handleOpenSearch);
+  }, []);
 
   // 태그 카운트 계산
   const tagCounts = useMemo(() => {
@@ -125,6 +146,15 @@ export default function HomeViewContent() {
 
   return (
     <div style={{ marginTop: HEIGHTS.GNB_HEIGHT }}>
+      {/* 검색 오버레이 */}
+      {contents && (
+        <SearchBar
+          docs={contents}
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
+      )}
+
       {/* 모바일 요약 */}
       <MobileFilter {...summaryProps} />
 
