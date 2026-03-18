@@ -14,7 +14,7 @@ import { getSlugFromUrl } from '@/utils/feedUtils';
 
 interface FeedCardProps {
   content: TilContentType;
-  meta?: DocMeta & { rawUrl: string; url: string; title: string; date: string; summary?: string };
+  meta?: DocMeta & { rawUrl: string; url: string; title: string; date: string; summary?: string; heading?: string };
 }
 
 export const FeedCard = ({ content, meta }: FeedCardProps) => {
@@ -56,8 +56,8 @@ export const FeedCard = ({ content, meta }: FeedCardProps) => {
         </header>
 
         {/* 제목 */}
-        <h2 className="text-lg font-semibold text-[var(--foreground)] mb-2.5 leading-snug tracking-tight">
-          {meta?.topic ?? content.title}
+        <h2 className="text-lg font-semibold text-[var(--foreground)] mb-2.5 leading-snug tracking-tight truncate">
+          {meta?.heading || meta?.topic || content.title}
         </h2>
 
         {/* 요약 */}

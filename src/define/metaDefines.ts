@@ -22,4 +22,5 @@ export type DocMetaWithUrl = DocMeta & {
   title: string;
   date: string;
   summary: string;
+  heading: string;
 };

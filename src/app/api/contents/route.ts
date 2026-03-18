@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import matter from 'gray-matter';
 import { fetchTilContentMarkdown, fetchTilContents } from '@/utils/tilUtils';
-import { extractSummary } from '@/utils/mdParseUtils';
+import { extractSummary, extractHeading } from '@/utils/mdParseUtils';
 import { TilContentType } from '@/define/tilDefines';
 
 export type ContentItem = {
@@ -15,6 +15,7 @@ export type ContentItem = {
   keywords: string[];
   relatedCategories: string[];
   summary: string;
+  heading: string;
   rawUrl: string;
   url: string;
   satisfaction?: {
@@ -82,6 +83,7 @@ export async function GET() {
             ? data.relatedCategories.map(String)
             : [],
           summary: extractSummary(content),
+          heading: extractHeading(content),
           rawUrl: result.til.rawUrl,
           url: result.til.url,
           satisfaction: parseSatisfaction(data.satisfaction),

@@ -16,6 +16,19 @@ export function parseMarkdownWithMeta(raw: string): ParsedMarkdown {
 }
 
 /**
+ * 마크다운 본문에서 첫 번째 h1 제목(# )을 추출합니다.
+ */
+export function extractHeading(content: string): string {
+  for (const line of content.split('\n')) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('# ')) {
+      return trimmed.slice(2).trim();
+    }
+  }
+  return '';
+}
+
+/**
  * 마크다운 본문에서 요약(첫 문단)을 추출합니다.
  * - 첫 번째 제목(#)은 건너뜁니다.
  * - 첫 번째 비어있지 않은 텍스트 단락을 반환합니다.

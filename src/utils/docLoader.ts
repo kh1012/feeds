@@ -2,7 +2,7 @@ import matter from 'gray-matter';
 import { fetchTilContentMarkdown, fetchTilContents } from '@/utils/tilUtils';
 import { DocMeta, DocMetaWithUrl } from '@/define/metaDefines';
 import { TilContentType } from '@/define/tilDefines';
-import { extractSummary } from '@/utils/mdParseUtils';
+import { extractSummary, extractHeading } from '@/utils/mdParseUtils';
 
 /** 모든 TIL md에서 frontmatter 읽어오기 (비동기) */
 export async function loadAllDocs(): Promise<DocMeta[]> {
@@ -51,6 +51,7 @@ export async function loadAllDocsWithUrl(): Promise<DocMetaWithUrl[]> {
         title: result.til.title,
         date: result.til.date,
         summary: extractSummary(content),
+        heading: extractHeading(content),
       });
     } catch {
       console.warn(`Failed to parse frontmatter: ${result.til.rawUrl}`);
