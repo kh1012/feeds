@@ -18,6 +18,7 @@ import { HEIGHTS } from '@/define/heightDefines';
 import Tag from '@/components/common/Tag';
 import { Loader } from 'lucide-react';
 import RelatedFeeds from '@/components/feeds/RelatedFeeds';
+import GiscusComments from '@/components/feeds/GiscusComments';
 
 type FeedDetailContentProps = {
   doc: DocMetaWithUrl;
@@ -204,6 +205,9 @@ export function FeedDetailContent({ doc, docs, slug }: FeedDetailContentProps) {
                   </a>
                 </div>
               </article>
+
+              {/* 댓글 */}
+              <GiscusComments />
 
               {/* 관련 글 추천 */}
               <RelatedFeeds currentDoc={doc} allDocs={docs} />

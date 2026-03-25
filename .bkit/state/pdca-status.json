@@ -1,0 +1,215 @@
+{
+  "version": "3.0",
+  "lastUpdated": "2026-03-25T09:14:11.921Z",
+  "activeFeatures": [
+    "maxys_proto",
+    "frontend-3",
+    "send-message",
+    "model",
+    "feeds"
+  ],
+  "primaryFeature": "maxys_proto",
+  "features": {
+    "maxys_proto": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-25T07:08:09.634Z",
+        "lastUpdated": "2026-03-25T07:29:23.055Z"
+      },
+      "lastFile": "/Volumes/maxtest/Desktop/MIDAS/maxys_proto/check-ports.sh"
+    },
+    "frontend-3": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-25T07:10:56.939Z",
+        "lastUpdated": "2026-03-25T07:10:56.939Z"
+      },
+      "lastFile": "/Volumes/maxtest/Desktop/MIDAS/maxys_proto/maxys/frontend-3/src/shared/lib/uuid.ts"
+    },
+    "send-message": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-25T07:11:08.473Z",
+        "lastUpdated": "2026-03-25T07:11:16.855Z"
+      },
+      "lastFile": "/Volumes/maxtest/Desktop/MIDAS/maxys_proto/maxys/frontend-3/src/features/send-message/model/use-chat-stream.ts"
+    },
+    "model": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-25T07:11:29.871Z",
+        "lastUpdated": "2026-03-25T07:12:00.668Z"
+      },
+      "lastFile": "/Volumes/maxtest/Desktop/MIDAS/maxys_proto/maxys/frontend-3/src/entities/thread/model/local-thread-repository.ts"
+    },
+    "feeds": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-25T09:08:30.848Z",
+        "lastUpdated": "2026-03-25T09:14:11.921Z"
+      },
+      "lastFile": "/Users/kh1012/MIDAS/Research/feeds/src/components/feeds/GiscusComments.tsx"
+    }
+  },
+  "pipeline": {
+    "currentPhase": 1,
+    "level": "Dynamic",
+    "phaseHistory": []
+  },
+  "session": {
+    "startedAt": "2026-03-25T04:56:34.292Z",
+    "onboardingCompleted": false,
+    "lastActivity": "2026-03-25T09:14:11.921Z"
+  },
+  "history": [
+    {
+      "timestamp": "2026-03-25T07:08:09.634Z",
+      "feature": "maxys_proto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:08:16.781Z",
+      "feature": "maxys_proto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:09:03.078Z",
+      "feature": "maxys_proto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:09:10.106Z",
+      "feature": "maxys_proto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:10:56.939Z",
+      "feature": "frontend-3",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:11:08.473Z",
+      "feature": "send-message",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:11:16.855Z",
+      "feature": "send-message",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:11:29.871Z",
+      "feature": "model",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:11:44.381Z",
+      "feature": "model",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:11:50.377Z",
+      "feature": "model",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:11:56.257Z",
+      "feature": "model",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:12:00.668Z",
+      "feature": "model",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:24:58.219Z",
+      "feature": "maxys_proto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T07:29:23.055Z",
+      "feature": "maxys_proto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T09:08:30.848Z",
+      "feature": "feeds",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T09:08:36.248Z",
+      "feature": "feeds",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T09:08:41.435Z",
+      "feature": "feeds",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-25T09:14:11.921Z",
+      "feature": "feeds",
+      "phase": "do",
+      "action": "updated"
+    }
+  ],
+  "stateMachine": {
+    "defaultWorkflow": "default",
+    "activeWorkflows": {},
+    "totalTransitions": 0
+  },
+  "automation": {
+    "globalLevel": 2,
+    "trustScore": 40,
+    "pendingApprovals": 0,
+    "lastGateResult": null
+  },
+  "team": {
+    "enabled": true,
+    "stateFile": ".bkit/runtime/agent-state.json",
+    "eventsFile": ".bkit/runtime/agent-events.jsonl"
+  }
+}
