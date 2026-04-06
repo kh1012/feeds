@@ -232,6 +232,87 @@ body {
     border-bottom-color: var(--accent);
 }
 
+/* 임베드 iframe 스타일 */
+.prose-github .embed-container {
+    position: relative;
+    width: 100%;
+    margin: 1.5em 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    background: var(--content-bg);
+}
+
+.prose-github .embed-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* 임베드 링크 카드 (iframe 불가 서비스용) */
+.prose-github .embed-card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin: 1.5em 0;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: var(--content-bg);
+    color: var(--foreground) !important;
+    text-decoration: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.prose-github .embed-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 12px rgba(171, 155, 133, 0.1);
+}
+
+.prose-github .embed-card-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--accent-light);
+    color: var(--accent-text);
+}
+
+.prose-github .embed-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.prose-github .embed-card-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.prose-github .embed-card-url {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prose-github .embed-card-action {
+    flex-shrink: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--accent);
+}
+
 /* 코드 블록 스타일 */
 .prose-github pre {
     padding: 1.25rem;

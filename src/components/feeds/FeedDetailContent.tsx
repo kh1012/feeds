@@ -19,6 +19,7 @@ import Tag from '@/components/common/Tag';
 import { Loader } from 'lucide-react';
 import RelatedFeeds from '@/components/feeds/RelatedFeeds';
 import GiscusComments from '@/components/feeds/GiscusComments';
+import { markdownComponents } from '@/components/markdown/MarkdownComponents';
 
 type FeedDetailContentProps = {
   doc: DocMetaWithUrl;
@@ -184,7 +185,11 @@ export function FeedDetailContent({ doc, docs, slug }: FeedDetailContentProps) {
                   <ContentSkeleton />
                 ) : (
                   <div className="prose-github max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeHighlight]}
+                      components={markdownComponents}
+                    >
                       {markdownContent}
                     </ReactMarkdown>
                   </div>
